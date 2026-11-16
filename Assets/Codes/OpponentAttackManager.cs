@@ -8,7 +8,7 @@ public class OpponentAttackManager : MonoBehaviour
 
     private void Start()
     {
-        cardInteraction = FindObjectOfType<CardInteraction>();
+        cardInteraction = FindFirstObjectByType<CardInteraction>();
     }
 
     public void PerformAttacks()

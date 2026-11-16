@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3d534fa26d0d924bb5bfb696c066200, type: 3}
+  m_Name: tidal_vigil
+  m_EditorClassIdentifier: Shrine::Shrine.Data.OmenDefinition
+  _data:
+    Id: tidal_vigil
+    Title: Tidal Vigil
+    Description: Water cards mend 1 defence when played.
+    AttackBonus: 0
+    DefenseBonus: 1
+    DirectDamageBonus: 0
+    RefreshMana: 0
+    FavourBonus: 0
