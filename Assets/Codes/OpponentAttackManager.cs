@@ -5,7 +5,6 @@ using System.Linq;
 public class OpponentAttackManager : MonoBehaviour
 {
     private CardInteraction cardInteraction;
-    private bool hasAttackedThisTurn = false;  // Add this to track if cards have attacked
 
     private void Start()
     {
@@ -62,11 +61,5 @@ public class OpponentAttackManager : MonoBehaviour
             .GetComponentsInChildren<CardDisplay>()
             .Where(cd => !cd.isOpponentCard && cd.transform.parent.name == "PlayerFieldArea")
             .ToList();
-    }
-
-    // Add this method to reset attack status at the start of turn
-    public void ResetAttackStatus()
-    {
-        hasAttackedThisTurn = false;
     }
 }
