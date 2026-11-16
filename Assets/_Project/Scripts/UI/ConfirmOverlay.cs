@@ -35,6 +35,8 @@ namespace Shrine.UI
             _message.text = message;
             _onConfirm = onConfirm;
             gameObject.SetActive(true);
+            CanvasGroup group = GetComponent<CanvasGroup>();
+            if (group != null) group.alpha = 1f;
             transform.SetAsLastSibling();
         }
 

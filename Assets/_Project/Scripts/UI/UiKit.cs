@@ -90,10 +90,9 @@ namespace Shrine.UI
         {
             RectTransform rect = Centered(parent, name, size, position);
             var image = rect.gameObject.AddComponent<Image>();
-            image.sprite = LoadSprite("FotosMainMenu/MainMenuBoton");
+            image.sprite = ProceduralArt.ButtonFrame(primary);
             image.type = UnityEngine.UI.Image.Type.Sliced;
-            image.color = primary ? ShrinePalette.WithAlpha(ShrinePalette.EmberGold, 0.16f)
-                : ShrinePalette.WithAlpha(ShrinePalette.TwilightIndigo, 0.92f);
+            image.color = Color.white;
             var button = rect.gameObject.AddComponent<Button>();
             button.targetGraphic = image;
             button.transition = Selectable.Transition.None;
@@ -114,7 +113,7 @@ namespace Shrine.UI
         {
             RectTransform outer = Centered(parent, name, size, position);
             UnityEngine.UI.Image frame = outer.gameObject.AddComponent<UnityEngine.UI.Image>();
-            frame.sprite = LoadSprite("FotosManageDeckScene/Fondo de cartas seleccion");
+            frame.sprite = ProceduralArt.CardFrame();
             frame.type = UnityEngine.UI.Image.Type.Sliced;
             frame.color = new Color(1, 1, 1, alpha);
             frame.raycastTarget = false;

@@ -8,7 +8,7 @@ namespace Shrine.Data
     {
         [Header("Hero")]
         [SerializeField] private int _startingHealth = 30;
-        [SerializeField] private int _startingMana = 1;
+        [SerializeField] private int _startingMana = 2;
         [SerializeField] private int _maxMana = 10;
 
         [Header("Cards")]
@@ -46,7 +46,7 @@ namespace Shrine.Data
         public void ResetDefaults()
         {
             _startingHealth = 30;
-            _startingMana = 1;
+            _startingMana = 2;
             _maxMana = 10;
             _startingHandSize = 4;
             _maxHandSize = 8;

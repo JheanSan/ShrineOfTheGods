@@ -26,6 +26,8 @@ namespace Shrine.UI
         public void Open()
         {
             gameObject.SetActive(true);
+            CanvasGroup group = GetComponent<CanvasGroup>();
+            if (group != null) group.alpha = 1f;
             transform.SetAsLastSibling();
         }
 

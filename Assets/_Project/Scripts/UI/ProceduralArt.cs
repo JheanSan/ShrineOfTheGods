@@ -16,6 +16,79 @@ namespace Shrine.UI
 
         public static Sprite Get(string key) => Cache.TryGetValue(key, out Sprite sprite) ? sprite : null;
 
+        public static Sprite CardFrame()
+        {
+            const string key = "card_frame";
+            if (Cache.TryGetValue(key, out Sprite cached)) return cached;
+            const int width = 128;
+            const int height = 184;
+            var texture = new Texture2D(width, height, TextureFormat.RGBA32, false)
+            {
+                name = "Procedural_card_frame",
+                filterMode = FilterMode.Bilinear,
+                wrapMode = TextureWrapMode.Clamp
+            };
+            for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
+            {
+                int d = Mathf.Min(Mathf.Min(x, width - 1 - x), Mathf.Min(y, height - 1 - y));
+                Color color = d < 3 ? ShrinePalette.EmberGold
+                    : d < 5 ? ShrinePalette.WithAlpha(ShrinePalette.DeepBronze, 0.9f)
+                    : d < 7 ? ShrinePalette.WithAlpha(ShrinePalette.AmethystHaze, 0.55f)
+                    : ShrinePalette.WithAlpha(ShrinePalette.ShrineShadow, 0.96f);
+                texture.SetPixel(x, y, color);
+            }
+            // Gem corners and a small top crest.
+            foreach (int x in new[] { 8, width - 9 })
+            foreach (int y in new[] { 8, height - 9 })
+                texture.SetPixel(x, y, ShrinePalette.AmethystHaze);
+            for (int x = width / 2 - 3; x <= width / 2 + 3; x++)
+                texture.SetPixel(x, height - 4, ShrinePalette.Candlelight);
+            texture.Apply(false, false);
+            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, width, height),
+                new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect,
+                new Vector4(14, 14, 14, 14));
+            sprite.name = "Procedural_card_frame";
+            Cache[key] = sprite;
+            return sprite;
+        }
+
+        public static Sprite ButtonFrame(bool primary)
+        {
+            string key = "button_" + primary;
+            if (Cache.TryGetValue(key, out Sprite cached)) return cached;
+            const int width = 128;
+            const int height = 48;
+            var texture = new Texture2D(width, height, TextureFormat.RGBA32, false)
+            {
+                name = "Procedural_" + key,
+                filterMode = FilterMode.Bilinear,
+                wrapMode = TextureWrapMode.Clamp
+            };
+            Color edge = primary ? ShrinePalette.EmberGold : ShrinePalette.DeepBronze;
+            Color fill = ShrinePalette.WithAlpha(ShrinePalette.ShrineShadow, 0.94f);
+            for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
+            {
+                int edgeDistance = Mathf.Min(Mathf.Min(x, width - 1 - x), Mathf.Min(y, height - 1 - y));
+                Color color = edgeDistance < 2 ? edge
+                    : edgeDistance < 4 ? ShrinePalette.WithAlpha(edge, 0.35f)
+                    : fill;
+                texture.SetPixel(x, y, color);
+            }
+            // Corner gems, engraved rather than glowing.
+            foreach (int x in new[] { 6, width - 7 })
+            foreach (int y in new[] { 6, height - 7 })
+                texture.SetPixel(x, y, ShrinePalette.Candlelight);
+            texture.Apply(false, false);
+            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, width, height),
+                new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect,
+                new Vector4(12, 12, 12, 12));
+            sprite.name = "Procedural_" + key;
+            Cache[key] = sprite;
+            return sprite;
+        }
+
         public static Sprite Mote()
         {
             const string key = "mote";

@@ -115,6 +115,8 @@ namespace Shrine.Gameplay
                 Draw(Side.Player);
                 Draw(Side.Opponent);
             }
+            EnsurePlayableOpeningHand(_player);
+            EnsurePlayableOpeningHand(_opponent);
             RollOmen();
             CurrentSide = Side.Player;
             TurnChanged?.Invoke(CurrentSide);
@@ -122,6 +124,28 @@ namespace Shrine.Gameplay
         }
 
         public Participant ParticipantFor(Side side) => side == Side.Player ? _player : _opponent;
+
+        /// <summary>Avoids a dead opening hand where every card costs more than starting mana.</summary>
+        private void EnsurePlayableOpeningHand(Participant participant)
+        {
+            CardInstance cheapest = null;
+            foreach (CardInstance card in participant.Hand)
+                if (cheapest == null || card.Data.ManaCost < cheapest.Data.ManaCost)
+                    cheapest = card;
+            if (cheapest == null || cheapest.Data.ManaCost <= _balance.StartingMana) return;
+            if (participant.DrawPile.Count == 0) return;
+
+            int cheapestIndex = 0;
+            for (int i = 1; i < participant.DrawPile.Count; i++)
+                if (participant.DrawPile[i].ManaCost < participant.DrawPile[cheapestIndex].ManaCost)
+                    cheapestIndex = i;
+            CardData affordable = participant.DrawPile[cheapestIndex];
+            participant.DrawPile[cheapestIndex] = cheapest.Data;
+            participant.Hand.Remove(cheapest);
+            var replacement = new CardInstance(affordable);
+            if (_currentOmen.DefenseBonus > 0) replacement.ModifyDefense(_currentOmen.DefenseBonus);
+            participant.Hand.Add(replacement);
+        }
 
         public bool CanPlay(Side side, int uid)
         {

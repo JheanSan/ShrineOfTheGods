@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BalanceConfig
   m_EditorClassIdentifier: Shrine::Shrine.Data.BalanceConfig
   _startingHealth: 30
-  _startingMana: 1
+  _startingMana: 2
   _maxMana: 10
   _startingHandSize: 4
   _maxHandSize: 8

@@ -46,23 +46,24 @@ namespace Shrine.UI
             _glow = AddImage(rect, "ReadyGlow", ProceduralArt.RadialGlow(ShrinePalette.SpiritCyan),
                 ShrinePalette.WithAlpha(ShrinePalette.SpiritCyan, 0f), size * 1.45f, Vector2.zero);
 
-            _frame = AddImage(rect, "Frame", UiKit.LoadSprite("FotosManageDeckScene/Fondo de cartas seleccion"),
+            _frame = AddImage(rect, "Frame", ProceduralArt.CardFrame(),
                 Color.white, size, Vector2.zero);
             _frame.type = Image.Type.Sliced;
+            _frame.raycastTarget = true;
 
             _art = AddImage(rect, "Art", null, Color.white,
-                new Vector2(size.x - 30f, size.y * 0.52f), new Vector2(0f, size.y * 0.12f));
+                new Vector2(size.x - 34f, size.y * 0.46f), new Vector2(0f, size.y * 0.05f));
 
-            float top = size.y * 0.5f - 28f;
-            float bottom = -size.y * 0.5f + 26f;
-            _name = AddText(rect, "Name", string.Empty, compact ? 17 : 20, ShrinePalette.Candlelight,
-                new Vector2(size.x - 36f, 36f), new Vector2(0f, top), true);
-            _element = AddText(rect, "Element", string.Empty, compact ? 14 : 16, ShrinePalette.BoneParchment,
-                new Vector2(size.x - 36f, 24f), new Vector2(0f, top - 30f), false);
-            _stats = AddText(rect, "Stats", string.Empty, compact ? 18 : 22, ShrinePalette.Candlelight,
-                new Vector2(size.x - 20f, 40f), new Vector2(0f, bottom), true);
-            _cost = AddText(rect, "Cost", string.Empty, compact ? 22 : 28, ShrinePalette.Candlelight,
-                new Vector2(40f, 40f), new Vector2(-size.x * 0.5f + 22f, top), true);
+            float top = size.y * 0.5f - 24f;
+            float bottom = -size.y * 0.5f + 24f;
+            _name = AddText(rect, "Name", string.Empty, compact ? 13 : 17, ShrinePalette.Candlelight,
+                new Vector2(size.x - 48f, 28f), new Vector2(14f, top), true);
+            _element = AddText(rect, "Element", string.Empty, compact ? 11 : 13, ShrinePalette.BoneParchment,
+                new Vector2(size.x - 48f, 20f), new Vector2(14f, top - 24f), false);
+            _stats = AddText(rect, "Stats", string.Empty, compact ? 16 : 20, ShrinePalette.Candlelight,
+                new Vector2(size.x - 16f, 34f), new Vector2(0f, bottom), true);
+            _cost = AddText(rect, "Cost", string.Empty, compact ? 20 : 24, ShrinePalette.Candlelight,
+                new Vector2(38f, 38f), new Vector2(-size.x * 0.5f + 20f, top), true);
         }
 
         public void Bind(CardInstance card, bool interactive, bool ready)

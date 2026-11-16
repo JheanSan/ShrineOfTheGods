@@ -17,12 +17,14 @@ namespace Shrine.UI
         {
             _panel = UiKit.Centered(transform, "TooltipPanel", new Vector2(400, 180), Vector2.zero);
             var image = _panel.gameObject.AddComponent<UnityEngine.UI.Image>();
-            image.sprite = UiKit.LoadSprite("FotosMainMenu/MainMenuBoton");
+            image.sprite = ProceduralArt.ButtonFrame(false);
             image.type = UnityEngine.UI.Image.Type.Sliced;
             image.color = ShrinePalette.WithAlpha(ShrinePalette.MidnightInk, 0.96f);
             image.raycastTarget = false;
             _text = UiKit.Text(_panel, "TooltipText", string.Empty, 20, ShrinePalette.BoneParchment);
             _text.margin = new Vector4(18, 12, 18, 12);
+            Group.alpha = 1f;
+            gameObject.SetActive(true);
             Hide();
         }
 

@@ -36,6 +36,8 @@ namespace Shrine.UI
                 ? $"The rival shrine falls silent.\n\n+{xp} pilgrimage XP\nRecord: {wins} victories in {games} battles"
                 : $"The shrine remembers your offering.\n\n+{xp} pilgrimage XP\nRecord: {wins} victories in {games} battles";
             gameObject.SetActive(true);
+            CanvasGroup group = GetComponent<CanvasGroup>();
+            if (group != null) group.alpha = 1f;
             transform.SetAsLastSibling();
             RectTransform panel = (RectTransform)transform.Find("EndPanel");
             panel.localScale = Vector3.one * 0.9f;

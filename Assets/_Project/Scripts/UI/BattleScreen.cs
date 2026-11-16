@@ -34,6 +34,7 @@ namespace Shrine.UI
         private TextMeshProUGUI _omenTitle;
         private TextMeshProUGUI _omenDescription;
         private TextMeshProUGUI _favourText;
+        private TextMeshProUGUI _enemyHandCount;
         private TextMeshProUGUI _feedback;
         private RectTransform _omenBanner;
         private ShrineButton _endTurn;
@@ -82,7 +83,7 @@ namespace Shrine.UI
 
             _omenBanner = UiKit.Centered(transform, "OmenBanner", new Vector2(620, 92), new Vector2(0, 474));
             var omenImage = _omenBanner.gameObject.AddComponent<Image>();
-            omenImage.sprite = UiKit.LoadSprite("FotosMainMenu/MainMenuBoton");
+            omenImage.sprite = ProceduralArt.ButtonFrame(false);
             omenImage.type = Image.Type.Sliced;
             omenImage.color = ShrinePalette.WithAlpha(ShrinePalette.TwilightIndigo, 0.9f);
             omenImage.raycastTarget = false;
@@ -108,7 +109,9 @@ namespace Shrine.UI
                 new Vector2(360, 40), new Vector2(720, 232), true);
 
             RectTransform opponentField = UiKit.Centered(transform, "OpponentFieldArea", new Vector2(900, 220),
-                new Vector2(0, 150));
+                new Vector2(0, 220));
+            _enemyHandCount = UiKit.TextAt(transform, "EnemyHand", string.Empty, 20, ShrinePalette.MoonSilver,
+                new Vector2(220, 40), new Vector2(560, 168), true);
             _opponentFieldRoot = opponentField;
 
             _altarRect = UiKit.Centered(transform, "ShrineAltar", new Vector2(260, 260), new Vector2(0, -30));
@@ -132,14 +135,14 @@ namespace Shrine.UI
             }
             _favourText = UiKit.TextAt(transform, "FavourText", string.Empty, 24, ShrinePalette.Candlelight,
                 new Vector2(260, 40), new Vector2(0, -30), true);
-            _blessing = UiKit.Button(transform, "BlessingButton", "INVOKE BLESSING", new Vector2(280, 60),
-                new Vector2(0, -160), () => _model.InvokeBlessing());
+            _blessing = UiKit.Button(transform, "BlessingButton", "INVOKE BLESSING", new Vector2(300, 56),
+                new Vector2(330, -120), () => _model.InvokeBlessing());
             _blessing.SetInteractable(false);
 
-            UiKit.Button(transform, "OfferingButton", "OFFER", new Vector2(150, 48), new Vector2(220, -30), OfferHint, false);
+            UiKit.Button(transform, "OfferingButton", "OFFER", new Vector2(150, 48), new Vector2(240, 34), OfferHint, false);
 
             RectTransform playerField = UiKit.Centered(transform, "PlayerFieldArea", new Vector2(900, 220),
-                new Vector2(0, -230));
+                new Vector2(0, -180));
             _playerFieldRoot = playerField;
 
             _playerAvatarRect = UiKit.Centered(transform, "PlayerPortrait", new Vector2(150, 180),
@@ -157,7 +160,7 @@ namespace Shrine.UI
             RectTransform manaRow = UiKit.Centered(transform, "ManaRow", new Vector2(360, 46), new Vector2(-620, -170));
             _manaText = UiKit.Text(manaRow, "ManaLabel", string.Empty, 26, ShrinePalette.SpiritCyan, true);
 
-            RectTransform hand = UiKit.Centered(transform, "HandArea", new Vector2(1100, 220), new Vector2(0, -430));
+            RectTransform hand = UiKit.Centered(transform, "HandArea", new Vector2(1100, 220), new Vector2(0, -400));
             _handRoot = hand;
 
             _endTurn = UiKit.Button(transform, "EndTurnButton", "END TURN", new Vector2(300, 72),
@@ -203,7 +206,12 @@ namespace Shrine.UI
 
         private void OnCardDrawn(CardInstance card, Side side)
         {
-            CardView view = GetView(card, side == Side.Player ? _handRoot : _opponentFieldRoot);
+            if (side == Side.Opponent)
+            {
+                _enemyHandCount.text = $"RIVAL HAND  {_model.Opponent.Hand.Count}";
+                return;
+            }
+            CardView view = GetView(card, _handRoot);
             view.Rect.SetParent(side == Side.Player ? _handRoot : _opponentFieldRoot, false);
             Layout();
             view.PlayEnter(0.05f * (_model.ParticipantFor(side).Hand.Count % 6));
@@ -443,6 +451,7 @@ namespace Shrine.UI
             _roundText.text = $"ROUND {_model.Round}";
             _playerHealth.text = $"{player.Health} / {player.MaxHealth}";
             _opponentHealth.text = $"{opponent.Health} / {opponent.MaxHealth}";
+            _enemyHandCount.text = $"RIVAL HAND  {opponent.Hand.Count}";
             _manaText.text = $"MANA  {player.Mana} / {player.MaxMana}";
             _favourText.text = $"DIVINE FAVOUR  {player.Favour}%";
             _playerAvatar.sprite = UiKit.LoadSprite(player.Patron.AvatarResourcePath);

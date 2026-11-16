@@ -110,9 +110,9 @@ namespace Shrine.Editor
 
         private static void ConfigureSpriteBorders()
         {
-            SetBorder("Assets/Resources/FotosMainMenu/MainMenuBoton.png", new Vector4(230, 46, 230, 46));
+            SetBorder("Assets/Resources/FotosMainMenu/MainMenuBoton.png", new Vector4(120, 22, 120, 22));
             SetBorder("Assets/Resources/FotosManageDeckScene/Fondo de cartas seleccion.jpeg",
-                new Vector4(110, 90, 110, 90));
+                new Vector4(60, 50, 60, 50));
         }
 
         private static void SetBorder(string path, Vector4 border)
