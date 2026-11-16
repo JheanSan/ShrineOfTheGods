@@ -8,7 +8,7 @@ Commit links use the short hash once the task is committed.
 | T-001 | 0 | Locate project, verify Unity install, clone repo | done | — | GitHub `JheanSan/ShrineOfTheGods` cloned to `~/Projects`. |
 | T-002 | 0 | Repair git hygiene and protected branches | done | `b263fff` | Untracked Library/Logs/UserSettings/.vs; new .gitignore/.gitattributes. |
 | T-003 | 0 | Run original project and document recon | done | — | Unity 2022.3.44f1, built-in RP, uGUI card battler; six scenes. |
-| T-004 | 0 | Upgrade to Unity 6000.3.22f1 and document | doing | — | Removed broken TMP examples; added uGUI/test framework. |
+| T-004 | 0 | Upgrade to Unity 6000.3.22f1 and document | done | `0259cde` | Removed broken TMP examples; added uGUI/test framework. |
 | T-005 | 1 | Create `Shrine` scene, bootstrap and composition root | todo | — | Single runtime-built UI; old scenes kept out of build. |
 | T-006 | 1 | Pure battle rules model + deterministic AI | todo | — | No MonoBehaviour; events; seeded RNG. |
 | T-007 | 1 | Card data as ScriptableObjects, full 17-card pool | todo | — | Values, lore, element, sigil. |

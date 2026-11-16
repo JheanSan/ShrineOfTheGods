@@ -14,3 +14,4 @@
 | B-010 | `PlayerInfoDisplay` creates a new Texture2D per profile open and never disposes it. | Open profile repeatedly. | open | — |
 | B-011 | Original `.gitattributes` marks every word as an LFS filter; clone warns. | `git clone` fresh. | fixed | T-002 |
 | B-012 | Original repo tracks `Library/` (2985 files) and `.vs/`. | `git ls-files Library`. | fixed | T-002 |
+| B-013 | Battle scene crashes on start with `ArgumentOutOfRangeException` when no deck is built; raw yellow/blue placeholder UI. | Play MainMenu → Play without sealing a deck. | open | — |
