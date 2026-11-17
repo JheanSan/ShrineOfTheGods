@@ -63,6 +63,7 @@ namespace Shrine.Tests
         {
             BattleModel model = RivalTurn();
             model.Opponent.Hand.Clear();
+            model.Opponent.Field.Clear();
             CardInstance goblin = Card("goblin", ElementKind.Air, 3, 3, 2);
             model.Opponent.Field.Add(goblin);
 
@@ -75,18 +76,43 @@ namespace Shrine.Tests
         }
 
         [Test]
-        public void PlanTurn_WhenPlayerHasCards_NeverAttacksTheHero()
+        public void PlanTurn_DoesNotAttackHeroWhileADefenderSurvives()
         {
             BattleModel model = RivalTurn();
             model.Opponent.Field.Add(Card("goblin", ElementKind.Air, 3, 3, 2));
-            model.Player.Field.Add(Card("wall", ElementKind.Earth, 1, 6, 2));
+            // Twenty defence cannot be removed by any single opening attacker, so the
+            // player's board is still standing when the plan finishes.
+            model.Player.Field.Add(Card("wall", ElementKind.Earth, 1, 20, 2));
 
             var ai = new OpponentAI(model, new SeededRandom(1), AiTuning.From(AiDifficulty.Merciless));
             List<BattleAction> actions = ai.PlanTurn();
 
             Assert.IsFalse(actions.Exists(a => a.Kind == BattleActionKind.AttackHero),
-                "The hero is protected while the player still has cards.");
+                "The hero is protected while a defender survives the plan.");
             Assert.IsTrue(actions.Exists(a => a.Kind == BattleActionKind.AttackCard));
+        }
+
+        [Test]
+        public void PlanTurn_SendsLeftoverAttackersAtTheHeroAfterClearingTheBoard()
+        {
+            BattleModel model = RivalTurn();
+            model.Opponent.Hand.Clear();
+            model.Opponent.Field.Clear();
+            CardInstance goblin = Card("goblin", ElementKind.Air, 3, 3, 2);
+            CardInstance sprinter = Card("sprinter", ElementKind.Air, 2, 2, 1);
+            model.Opponent.Field.Add(goblin);
+            model.Opponent.Hand.Add(sprinter);
+            // Air doubles into Earth, so three attack removes the six-defence wall and the
+            // cheap fresh card is free to strike the shrine in the same plan.
+            model.Player.Field.Add(Card("wall", ElementKind.Earth, 1, 6, 2));
+
+            var ai = new OpponentAI(model, new SeededRandom(1), AiTuning.From(AiDifficulty.Merciless));
+            List<BattleAction> actions = ai.PlanTurn();
+
+            Assert.IsTrue(actions.Exists(a => a.Kind == BattleActionKind.AttackCard
+                && a.CardUid == goblin.Uid));
+            Assert.IsTrue(actions.Exists(a => a.Kind == BattleActionKind.AttackHero
+                && a.CardUid == sprinter.Uid), "A spare attacker should hit the shrine.");
         }
 
         [Test]
@@ -147,22 +173,44 @@ namespace Shrine.Tests
         }
 
         [Test]
-        public void Aggressive_RefusesSuicidalTrade_ButMercilessTakesIt()
+        public void EveryPresetRefusesToThrowAwayACardForNothing()
         {
             BattleModel model = RivalTurn();
             model.Opponent.Hand.Clear();
+            model.Opponent.Field.Clear();
             CardInstance frail = Card("frail", ElementKind.Water, 1, 1, 2);
-            CardInstance brute = Card("brute", ElementKind.Earth, 5, 4, 2);
+            CardInstance brute = Card("brute", ElementKind.Earth, 5, 4, 8);
             model.Opponent.Field.Add(frail);
             model.Player.Field.Add(brute);
 
-            var measured = new OpponentAI(model, new SeededRandom(1), AiTuning.From(AiDifficulty.Aggressive));
-            Assert.IsFalse(measured.PlanTurn().Exists(a => a.Kind == BattleActionKind.AttackCard),
-                "The aggressive preset should hold a card that dies for nothing.");
+            AiDifficulty[] presets =
+            {
+                AiDifficulty.Measured, AiDifficulty.Aggressive, AiDifficulty.Merciless
+            };
+            foreach (AiDifficulty preset in presets)
+            {
+                var ai = new OpponentAI(model, new SeededRandom(1), AiTuning.From(preset));
+                Assert.IsFalse(ai.PlanTurn().Exists(a => a.Kind == BattleActionKind.AttackCard),
+                    $"{preset} traded a card that dies without killing anything.");
+            }
+        }
 
-            var merciless = new OpponentAI(model, new SeededRandom(1), AiTuning.From(AiDifficulty.Merciless));
-            Assert.IsTrue(merciless.PlanTurn().Exists(a => a.Kind == BattleActionKind.AttackCard),
-                "The merciless preset attacks with everything it has.");
+        [Test]
+        public void Merciless_TakesAProfitableKillEvenThoughItsCardDies()
+        {
+            BattleModel model = RivalTurn();
+            model.Opponent.Hand.Clear();
+            // Earth doubles into Water, so five attack removes the one-life target; the
+            // water reply is not doubled and still kills the martyr. That trade is worth it.
+            model.Opponent.Field.Clear();
+            CardInstance martyr = Card("martyr", ElementKind.Earth, 5, 3, 4);
+            CardInstance fragile = Card("fragile", ElementKind.Water, 6, 1, 6);
+            model.Opponent.Field.Add(martyr);
+            model.Player.Field.Add(fragile);
+
+            var ai = new OpponentAI(model, new SeededRandom(1), AiTuning.From(AiDifficulty.Merciless));
+            Assert.IsTrue(ai.PlanTurn().Exists(a => a.Kind == BattleActionKind.AttackCard
+                && a.CardUid == martyr.Uid), "A clean kill is always worth the body.");
         }
 
         [Test]
@@ -174,10 +222,12 @@ namespace Shrine.Tests
 
             Assert.Less(measured.MaxCardsPerTurn, merciless.MaxCardsPerTurn);
             Assert.Greater(measured.MinimumAttackScore, aggressive.MinimumAttackScore);
-            Assert.Greater(aggressive.MinimumAttackScore, merciless.MinimumAttackScore);
+            // Merciless is not reckless: it accepts thinner edges than Measured because it
+            // develops a wider board, but it never declines to a losing-trade free-for-all.
+            Assert.Greater(measured.MinimumAttackScore, merciless.MinimumAttackScore);
             Assert.Greater(merciless.KillBonus, aggressive.KillBonus);
-            Assert.Less(merciless.LossPenalty, measured.LossPenalty);
             Assert.Greater(merciless.LowHealth, measured.LowHealth);
+            Assert.Greater(merciless.ElementEdgeBonus, measured.ElementEdgeBonus);
             Assert.IsFalse(measured.AttackWithNewCards);
             Assert.IsTrue(merciless.AttackWithNewCards);
         }
@@ -208,6 +258,7 @@ namespace Shrine.Tests
             BattleModel model = RivalTurn();
             CardInstance goblin = Card("goblin", ElementKind.Air, 3, 3, 2);
             model.Opponent.Hand.Clear();
+            model.Opponent.Field.Clear();
             model.Opponent.Hand.Add(goblin);
             model.Player.Field.Add(Card("wisp", ElementKind.Water, 0, 1, 1));
 
@@ -225,6 +276,7 @@ namespace Shrine.Tests
             BattleModel model = RivalTurn();
             CardInstance hitter = Card("hitter", ElementKind.Fire, 3, 6, 2);
             CardInstance finisher = Card("finisher", ElementKind.Fire, 2, 2, 2);
+            model.Opponent.Field.Clear();
             model.Opponent.Field.Add(hitter);
             model.Opponent.Field.Add(finisher);
             model.Player.Field.Add(Card("wisp", ElementKind.Water, 0, 1, 1));

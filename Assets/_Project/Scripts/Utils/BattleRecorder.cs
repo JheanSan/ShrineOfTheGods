@@ -78,7 +78,11 @@ namespace Shrine.Utils
                 if (TryAction(screen, model))
                 {
                     actions++;
-                    yield return new WaitForSecondsRealtime(0.95f);
+                    // Catch the swing itself: trails, callouts and damage numerals live
+                    // for a fraction of a second, so a late frame would miss them.
+                    yield return new WaitForSecondsRealtime(0.16f);
+                    Capture($"strike_{actions:00}");
+                    yield return new WaitForSecondsRealtime(0.79f);
                     Capture($"action_{actions:00}");
                     yield return new WaitForSecondsRealtime(0.25f);
                     continue;

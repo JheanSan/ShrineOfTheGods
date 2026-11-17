@@ -18,6 +18,6 @@ MonoBehaviour:
     Element: 1
     Attack: 5
     Defense: 4
-    ManaCost: 7
+    ManaCost: 6
     Lore: A hydra that grows a new answer for every wound.
     ArtResourcePath: 

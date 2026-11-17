@@ -16,6 +16,7 @@ One line per document. Read `AGENTS.md` first.
 | [STYLE_BIBLE.md](STYLE_BIBLE.md) | Palette, shapes, lighting, type, motion, do/don't. |
 | [ANIMATION_GUIDE.md](ANIMATION_GUIDE.md) | Standard durations, easing, shake and hit-stop values. |
 | [UI_GUIDE.md](UI_GUIDE.md) | Components, spacing, states, transitions, navigation. |
+| [AI_GUIDE.md](AI_GUIDE.md) | Rival planner structure, weights, presets and the element cycle. |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | Systems, folder map, Mermaid diagrams. |
 | [TESTING.md](TESTING.md) | How to test, manual QA checklist, phase results. |
 | [PERFORMANCE.md](PERFORMANCE.md) | Profiler numbers before/after per phase. |

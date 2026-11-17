@@ -18,6 +18,6 @@ MonoBehaviour:
     Element: 0
     Attack: 4
     Defense: 4
-    ManaCost: 8
+    ManaCost: 6
     Lore: A chimera breathing fire and poison in the same breath.
     ArtResourcePath: 

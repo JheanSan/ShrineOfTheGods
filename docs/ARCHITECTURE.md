@@ -66,3 +66,31 @@ systems (`FirebaseController`, SQLite plugins, login) are removed with a written
 - Deterministic AI takes `IRandom`; tests seed it.
 - Async work is coroutine-based (no async void); no `Thread.Sleep`.
 - Every screen is closed by `ScreenRouter`; only it activates screens.
+
+## Combat model
+
+`BattleModel` owns every rule; views only present its events.
+
+- **Turn flow.** Player first, then the rival. Both start on 2 mana, gain one maximum
+  mana per round (cap 10) and refill on their own turn. Each draws at the start of its
+  turn. The opening hand is four cards with one guaranteed affordable card, and the
+  rival deploys its cheapest opening card as a **guardian** before the first turn
+  (`BalanceConfig.StartingGuardians`) so the pilgrim cannot strike a naked shrine on
+  turn one.
+- **Playing.** A card costs its mana, enters the field and may attack the same turn.
+  New cards do not have summoning sickness in this game.
+- **The hero is armoured by its board.** A shrine can only be struck while the opposing
+  field is empty, so clearing the board is the way to reach a life total.
+- **Element cycle.** `ElementRules` is the single source of truth:
+  `Fire > Air > Earth > Water > Fire`. An attacker that beats its target deals double
+  damage; a defender that beats its attacker deals double retaliation.
+- **Card powers.** Fire takes the omen's attack bonus. Water gains 2 defence the first
+  time it strikes. Earth ignores the first damage it would take (first retaliation) and
+  gains 2 defence. Air's first omened gale costs 1 less.
+- **Retaliation.** Card-to-card strikes always take damage back, doubled when the
+  defender has the element advantage. Earth's defence power and the omen shield apply
+  before the damage lands.
+- **Forecast.** `BattleScreen` predicts `EffectiveAttack`, `RetaliationDamage` and
+  `HeroDamage` while a field card is dragged, so the player can see the trade, the
+  kill, the reply and whether the card dies before committing.
+- **AI.** `OpponentAI` returns a deterministic action list; see `docs/AI_GUIDE.md`.

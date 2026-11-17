@@ -37,10 +37,23 @@ namespace Shrine.Tests
             BattleModel model = Create();
             model.Start();
             Assert.AreEqual(4, model.Player.Hand.Count);
-            Assert.AreEqual(4, model.Opponent.Hand.Count);
             Assert.AreEqual(Side.Player, model.CurrentSide);
             Assert.AreEqual(1, model.Round);
             Assert.AreEqual(2, model.Player.Mana);
+        }
+
+        [Test]
+        public void Start_GivesTheRivalAGuardianOnTheField()
+        {
+            BattleModel model = Create();
+            model.Start();
+
+            Assert.AreEqual(1, model.Opponent.Field.Count,
+                "The rival must not open with a naked shrine.");
+            Assert.AreEqual(3, model.Opponent.Hand.Count,
+                "The guardian is taken from the rival's opening hand.");
+            Assert.IsFalse(model.CanAttack(Side.Opponent, model.Opponent.Field[0].Uid),
+                "It is the pilgrim's turn, so the guardian cannot strike yet.");
         }
 
         [Test]
@@ -58,6 +71,24 @@ namespace Shrine.Tests
                 model.Start();
                 Assert.IsTrue(model.Player.Hand.Exists(c => c.Data.ManaCost <= 2),
                     $"Seed {seed} produced no affordable opening card.");
+            }
+        }
+
+        [Test]
+        public void Start_RivalKeepsAPlayableCardAfterTheGuardianIsDeployed()
+        {
+            CardData[] deck =
+            {
+                ContentFactory.Cards[0], ContentFactory.Cards[1], ContentFactory.Cards[2],
+                ContentFactory.Cards[3], ContentFactory.Cards[4], ContentFactory.Cards[5],
+                ContentFactory.Cards[6], ContentFactory.Cards[7]
+            };
+            for (int seed = 1; seed <= 12; seed++)
+            {
+                BattleModel model = Create(seed, deck);
+                model.Start();
+                Assert.IsTrue(model.Opponent.Hand.Exists(c => c.Data.ManaCost <= 2),
+                    $"Seed {seed}: the guardian left the rival with no playable opening card.");
             }
         }
 
@@ -100,15 +131,34 @@ namespace Shrine.Tests
         }
 
         [Test]
-        public void Combat_EarthIgnoresFirstHit()
+        public void Combat_EarthIgnoresItsFirstRetaliation()
+        {
+            BattleModel model = Create();
+            model.Start();
+            var earth = new CardInstance(new CardData("earth", "Earth", ElementKind.Earth, 3, 5, 3, "t", string.Empty));
+            var brute = new CardInstance(new CardData("brute", "Brute", ElementKind.Fire, 4, 9, 5, "t", string.Empty));
+            model.Player.Field.Add(earth);
+            model.Opponent.Field.Add(brute);
+
+            Assert.IsTrue(model.Attack(Side.Player, earth.Uid, brute.Uid));
+            Assert.AreEqual(6, brute.CurrentDefense);
+            Assert.AreEqual(5, earth.CurrentDefense, "The first retaliation is ignored.");
+            Assert.IsTrue(earth.HasUsedPower);
+        }
+
+        [Test]
+        public void Combat_EarthDealsFullDamageToTheShrine()
         {
             BattleModel model = Create();
             model.Start();
             var earth = new CardInstance(new CardData("earth", "Earth", ElementKind.Earth, 3, 5, 3, "t", string.Empty));
             model.Player.Field.Add(earth);
-            model.Attack(Side.Player, earth.Uid);
-            Assert.AreEqual(5, earth.CurrentDefense);
-            Assert.IsTrue(earth.HasUsedPower);
+            int before = model.Opponent.Health;
+
+            Assert.IsTrue(model.Attack(Side.Player, earth.Uid));
+            Assert.AreEqual(before - 3, model.Opponent.Health);
+            Assert.IsFalse(earth.HasUsedPower,
+                "A shrine cannot retaliate, so the defensive power is not spent.");
         }
 
         [Test]

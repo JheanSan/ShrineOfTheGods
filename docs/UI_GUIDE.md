@@ -89,7 +89,7 @@ States: normal, hover, pressed, focused, disabled, selected.
 - Never blame the player. Errors state the fix: "Your covenant needs 8 cards."
 - Numbers always show units/icons; no unexplained abbreviations.
 
-## Card face and board (Phase 7)
+## Card face and board (Phase 7, revised in Phase 8)
 
 Card: **172 x 230** canvas px, hand scale 0.92, field scale 0.98. Hand spacing
 186 px, so a five-card hand never overlaps; the hand root sits at y -390 so the
@@ -97,12 +97,17 @@ lowest card clears the screen edge.
 
 Card anatomy, top to bottom:
 - cost gem (0.22 w) top-left, overhanging the frame; the number is 0.115 w.
-- name plate: 0.92 w band, name at 0.086 w with 3 pt tracking.
-- element line under the plate, 0.058 w, 55 % desaturated element colour.
-- art well: 0.88 w x 0.44 h, recessed, with a vignette and a per-card painted scene.
+- name plate: 0.92 w x 0.092 h band at +0.40 h, name at 0.092 w with 2 pt tracking.
+- art well: 0.88 w x 0.36 h at +0.14 h, recessed, vignetted, with a per-element
+  painted scene and a faint element-sigil watermark in its top-right.
+- element ribbon: 0.94 w x 0.105 h at -0.062 h, filled with the element hue. The
+  glyph sits at -0.395 w, the element name follows at 0.065 w with 6 pt tracking,
+  and the element it defeats is right-aligned inside the band at 0.050 w
+  (`> WATER`).
 - rule at -0.163 h, then `ATK` and `LIFE` labels at 10 px, then the two gems at
   -0.33 h. Labels sit above the gems, never on them.
-- frames are 9-sliced; the outer 7 px is carved shadow, 22 px brackets are gilded.
+- frames are 9-sliced; the outer 7 px is carved shadow, 22 px brackets are gilded,
+  and the rail picks up 28 % of the element hue so the whole card reads coloured.
 
 Board:
 - two 1020 x 240 field panels, five 172 x 230 slots each at 190 px pitch.
@@ -115,3 +120,17 @@ Board:
 - the turn plaque shows cards remaining above `CARDS REMAIN`; `VICTORY`/`DEFEAT`
   replaces the count when the battle ends. The blessing button reads
   `BLESSING n%` until it is charged, then `CLAIM BLESSING`.
+
+### Combat readability (Phase 8)
+- **Element legend**: 380 x 126 panel under the rival plate, listing the four
+  arrows with their glyphs and the word `DOUBLE`. It never hides.
+- **Combat forecast**: 320 x 108 stone plate on the right while a field card is
+  dragged over a legal target. First line: attacker and defender names. Then
+  damage, `KILL`, reply damage and `CARD DIES`/`card survives`, then the
+  `DOUBLE DAMAGE` (or `their element answers x2`) line in the element hue.
+  It fades in over 0.10 s and fades out over 0.12 s when the drag ends.
+- **Strike feedback**: a 0.26 s trail in the attacker's element colour, a tinted
+  impact ring and numeral, `ELEMENTAL EDGE` callout on a doubled hit, then the
+  defender's retaliation in its own colour.
+- **Tooltip**: element title, `x2 vs` target, `weak to` threat, and the card's
+  one-line power. All of it comes from `ElementRules`, never duplicated strings.

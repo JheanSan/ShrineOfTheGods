@@ -42,6 +42,10 @@ crashlytics-build.properties
 *.unitypackage
 *.app
 
+# Test run artefacts
+results-*.xml
+TestResults/
+
 # Temporary / local backups and duplicate archives
 *.bak
 *.tmp

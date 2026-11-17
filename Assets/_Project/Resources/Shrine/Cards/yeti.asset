@@ -18,6 +18,6 @@ MonoBehaviour:
     Element: 2
     Attack: 4
     Defense: 3
-    ManaCost: 6
+    ManaCost: 4
     Lore: A yeti wrapped in white fur and the silence of high places.
     ArtResourcePath: 

@@ -1,15 +1,17 @@
 # Progress
 
 ## Active phase
-**Phase 7 — Clarity, presence and verification** (implementation complete, awaiting tag).
+**Phase 8 — Combat overhaul, element identity and a planning rival** (complete;
+tagged `v-phase-8`).
 
 ## Last completed task
-T-046 — autobattle recorder and full-battle verification: a 17-turn battle was
-played through the normal API and screenshotted end to end.
+T-057 — card labels no longer clip and the opening-hand guarantee falls back to
+the catalogue when the rival's pile holds no affordable card.
 
 ## Next three tasks
-1. Optional — native AudioMixer asset and sustained-battle profiling.
-2. Optional — physical gamepad verification and controller prompts.
+1. Phase 9: animated combat staging — attack lunge, hit reaction on the
+   defender card, and a slower rival turn so the plan is readable beat by beat.
+2. Optional — native AudioMixer asset and sustained-battle profiling.
 3. Optional — localisation (English/Spanish).
 
 ## Open blockers
@@ -20,6 +22,54 @@ played through the normal API and screenshotted end to end.
   gain-controlled AudioSources.
 
 ## Phase reports
+
+### Phase 8
+Goal: make combat make sense, make the elements visible, and make the rival
+genuinely hard to beat — then prove it by playing a series of whole matches.
+
+**Combat rules had to be fixed first.** Only Fire beat Air; Water, Earth and Air
+advantages did nothing at all, so the cycle printed on the cards was a lie. Worse,
+Earth's retaliation consumed its power after a shrine attack, so its first strike
+at a hero dealt zero. `ElementRules` is now the single source of truth: Fire > Air
+> Earth > Water > Fire, attacker damage doubles and so does the retaliation. The
+model, AI, card ribbon, legend and tooltip all read the same table.
+
+**Elements are now visible.** Every card face carries a full-width element ribbon
+in the element hue, the element glyph on the left, the element name, and the
+element it defeats (`EARTH > WATER`) on the right. Behind the art sits an element
+sigil watermark and a painted element scene: molten river and ember sky, moonlit
+waves and rain, stone pillars and dust, floating islands and wind streaks. The
+battle screen adds a persistent `ELEMENT CYCLE` legend under the rival plate, and
+every strike is tinted by the striking element — trail, ring, numerals, and an
+`ELEMENTAL EDGE` callout on a doubled hit. A combat forecast shows damage, `KILL`,
+reply damage and whether the card dies before the swing is committed.
+
+**The rival learned to hold a board.** Phase 7's planner traded every card it had,
+so its field was empty every turn and the recorder walked to the shrine. It now
+sorts attackers biggest-first, refuses an attack that kills nothing and costs it a
+body, prefers the element that beats the player's board (`ElementEdgeBonus`) and
+accepts a death only for a kill. `Merciless` also values its own card more than the
+old preset (`LossPenalty` 0.35 -> 1.2, `WastePenalty` 1.5 -> 4.0).
+
+**Turn order was a hidden blowout.** The pilgrim acts first, and a shrine can only
+be struck while its board is empty, so the pilgrim could hit a naked shrine on
+turn one. The rival now deploys its **cheapest** opening card as a guardian before
+the first turn (`BalanceConfig.StartingGuardians`). Cheapest, not strongest: an
+early build took the biggest card and dropped a 6-cost Hydra on turn one, which
+decided the game before it started.
+
+**Difficulty is measured, not claimed.** Eight autobattles against the recorder
+that wins almost everything: **5 rival wins, 3 player wins**, and the player's wins
+cost 27-30 life on four of them. Battles run 5-17 rounds and up to 42 actions.
+
+**Defects found by verification.** The 6-8 cost cards were traps that left both
+sides with dead hands (a 5/4 Chimera cost 8 while a 5/3 Phoenix cost 2); costs are
+now 2-6. The playable-opening-hand guarantee could fail when the rival's random
+pile held no cheap card; it now falls back to the catalogue. Small card labels
+clipped because their rects were barely taller than the glyphs; they overflow now.
+The play flourish was drawn in canvas space while its card was still gliding, so a
+ring landed on an empty slot; it is parented to the card. Spent mana crystals were
+too bright to read as empty.
 
 ### Phase 7
 Goal: make the battle read at a glance, move like a modern card battler and

@@ -18,6 +18,6 @@ MonoBehaviour:
     Element: 3
     Attack: 5
     Defense: 3
-    ManaCost: 8
+    ManaCost: 5
     Lore: A harpy that carries the prayers of the lost to a silent heaven.
     ArtResourcePath: 

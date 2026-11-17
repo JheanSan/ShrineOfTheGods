@@ -22,11 +22,29 @@ romantic and ceremonial, never cartoonish, never neon-cyberpunk, never generic m
 | Blood ember | `#C4523C` | damage, fire, defeat, danger |
 | Moss devotion | `#719B7A` | healing, nature, success |
 | Moon silver | `#B9C2D6` | muted secondary text, disabled |
+| Ember orange (fire) | `#E0613F` | fire cards, fire damage, ember scenes |
+| Deep tide (water) | `#3E9FC4` | water cards, tide damage, water scenes |
+| Ochre stone (earth) | `#C8A34A` | earth cards, earth damage, stone scenes |
+| Pale gale (air) | `#BFD4E8` | air cards, gale damage, sky scenes |
 
 Rules: gold is a **highlight**, never a fill. Cyan and violet are light sources, not
 flat backgrounds. Damage always reads blood ember; healing reads moss; divine power
 reads cyan-to-gold. Never introduce saturated magenta, pure white (`#FFFFFF`) or pure
 black; the darkest value is midnight ink.
+
+### Element identity (non-negotiable)
+The four element hues above are **interface colours**, deliberately more saturated than
+the stone palette, because a 172 px card must announce its element before anything else:
+
+1. **Ribbon.** A full-width band in the element hue under the art, carrying the element
+   glyph and name on the left and the element it defeats on the right (`EARTH > WATER`).
+2. **Art scene.** Every card paints its own scene in the element's key: fire = molten
+   river and ember sky, water = moonlit waves and rain, earth = stone pillars and dust,
+   air = floating islands and wind streaks. The creature silhouette is seeded from the id.
+3. **Glyph watermark.** The element sigil repeats faintly over the art and again in the
+   legend, so the cycle is learnable without reading the tooltip.
+4. **Combat colour.** Damage numerals, trails, impacts and the `ELEMENTAL EDGE` callout
+   are tinted with the attacker's element. Retaliation is tinted with the defender's.
 
 ## 2. Shape language
 - **Arches and pointed ovals**: shrine windows, god medallions, card tops.
