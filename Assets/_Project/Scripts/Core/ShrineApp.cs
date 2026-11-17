@@ -133,7 +133,7 @@ namespace Shrine.Core
             var random = new SeededRandom(Environment.TickCount);
             _battle = new BattleModel(balance, catalog, Omens(), deck, playerPatron, rivalPatron, random,
                 Profile.Name, "The Rival Shrine");
-            _ai = new OpponentAI(_battle, random);
+            _ai = new OpponentAI(_battle, random, AiTuning.From(AiDifficulty.Merciless));
             _battleScreen.Bind(_battle, _ai);
             _gameOver.Close();
             _pause.Close();

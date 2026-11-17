@@ -72,6 +72,8 @@ namespace Shrine.Gameplay
         public Participant Opponent => _opponent;
         public Side CurrentSide { get; private set; } = Side.Player;
         public int Round => _round;
+        /// <summary>Copied from the balance asset so planners can bound their board.</summary>
+        public int MaxFieldSize => _balance.MaxFieldSize;
         public OmenData CurrentOmen => _currentOmen;
         public bool IsOver => _over;
         public bool IsStarted => _started;
@@ -365,7 +367,8 @@ namespace Shrine.Gameplay
             return cost;
         }
 
-        private int EffectiveAttack(CardInstance attacker, CardInstance defender, Side side)
+        /// <summary>Damage an attacker would deal to a card, omens included. Used by the AI and the UI preview.</summary>
+        public int EffectiveAttack(CardInstance attacker, CardInstance defender, Side side)
         {
             int damage = attacker.Data.Attack;
             if (attacker.Data.Element == ElementKind.Fire && defender.Data.Element == ElementKind.Air)

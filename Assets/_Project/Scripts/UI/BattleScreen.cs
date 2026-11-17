@@ -126,8 +126,8 @@ namespace Shrine.UI
         /// <summary>Wide stone band that sweeps in each turn so the handover is unmistakable.</summary>
         private void BuildTurnBanner()
         {
-            _turnBanner = UiKit.Centered(transform, "TurnBanner", new Vector2(860, 132),
-                new Vector2(0f, 214f));
+            _turnBanner = UiKit.Centered(transform, "TurnBanner", new Vector2(620, 84),
+                new Vector2(0f, 146f));
             _turnBannerGroup = _turnBanner.gameObject.AddComponent<CanvasGroup>();
             _turnBannerGroup.blocksRaycasts = false;
             _turnBannerGroup.alpha = 0f;
@@ -139,12 +139,12 @@ namespace Shrine.UI
 
             UiKit.ImageAt(_turnBanner, "TopRule", null,
                 ShrinePalette.WithAlpha(ShrinePalette.EmberGold, 0.75f),
-                new Vector2(790, 2f), new Vector2(0f, 46f));
+                new Vector2(560, 2f), new Vector2(0f, 30f));
             UiKit.ImageAt(_turnBanner, "BottomRule", null,
                 ShrinePalette.WithAlpha(ShrinePalette.EmberGold, 0.75f),
-                new Vector2(790, 2f), new Vector2(0f, -46f));
+                new Vector2(560, 2f), new Vector2(0f, -30f));
 
-            _turnBannerText = UiKit.Text(_turnBanner, "Label", string.Empty, 44,
+            _turnBannerText = UiKit.Text(_turnBanner, "Label", string.Empty, 32,
                 ShrinePalette.Candlelight, true);
             _turnBannerText.fontStyle = FontStyles.Bold;
         }
@@ -157,13 +157,13 @@ namespace Shrine.UI
             _turnBanner.DOKill();
             _turnBannerGroup.DOKill();
             _turnBannerGroup.alpha = 0f;
-            _turnBanner.anchoredPosition = new Vector2(-140f, 214f);
+            _turnBanner.anchoredPosition = new Vector2(-120f, 146f);
             Sequence sequence = DOTween.Sequence();
             sequence.Append(_turnBannerGroup.DOFade(1f, 0.14f));
-            sequence.Join(_turnBanner.DOAnchorPos(new Vector2(0f, 214f), 0.40f).SetEase(Ease.OutCubic));
-            sequence.AppendInterval(0.72f);
+            sequence.Join(_turnBanner.DOAnchorPos(new Vector2(0f, 146f), 0.40f).SetEase(Ease.OutCubic));
+            sequence.AppendInterval(0.55f);
             sequence.Append(_turnBannerGroup.DOFade(0f, 0.34f));
-            sequence.Join(_turnBanner.DOAnchorPos(new Vector2(140f, 214f), 0.34f)
+            sequence.Join(_turnBanner.DOAnchorPos(new Vector2(120f, 146f), 0.34f)
                 .SetEase(Ease.InCubic));
         }
 
@@ -548,7 +548,7 @@ namespace Shrine.UI
             Debug.Log($"[AI] round={_model.Round} side={_model.CurrentSide} "
                 + $"mana={_model.Opponent.Mana}/{_model.Opponent.MaxMana} "
                 + $"hand={_model.Opponent.Hand.Count} field={_model.Opponent.Field.Count} "
-                + $"actions={actions.Count}");
+                + $"actions={actions.Count} {_ai.LastPlanSummary}");
             foreach (BattleAction action in actions)
             {
                 if (_model.IsOver) break;
