@@ -1,83 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<test-run id="2" testcasecount="11" result="Passed" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-11-17 00:14:13Z" end-time="2026-11-17 00:14:13Z" duration="0,1176411">
-  <test-suite type="TestSuite" id="1000" name="Shrine of the Gods" fullname="Shrine of the Gods" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-11-17 00:14:13Z" end-time="2026-11-17 00:14:13Z" duration="0.117641" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+<test-run id="2" testcasecount="11" result="Passed" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-11-17 00:31:04Z" end-time="2026-11-17 00:31:04Z" duration="0,11969">
+  <test-suite type="TestSuite" id="1000" name="Shrine of the Gods" fullname="Shrine of the Gods" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-11-17 00:31:04Z" end-time="2026-11-17 00:31:04Z" duration="0.119690" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
     <properties>
       <property name="platform" value="EditMode" />
     </properties>
-    <test-suite type="Assembly" id="1013" name="Shrine.Tests.EditMode.dll" fullname="C:/Users/Admin/Projects/ShrineOfTheGods/Library/ScriptAssemblies/Shrine.Tests.EditMode.dll" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-11-17 00:14:13Z" end-time="2026-11-17 00:14:13Z" duration="0.095308" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <test-suite type="Assembly" id="1013" name="Shrine.Tests.EditMode.dll" fullname="C:/Users/Admin/Projects/ShrineOfTheGods/Library/ScriptAssemblies/Shrine.Tests.EditMode.dll" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-11-17 00:31:04Z" end-time="2026-11-17 00:31:04Z" duration="0.098534" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
       <properties>
-        <property name="_PID" value="11152" />
+        <property name="_PID" value="7140" />
         <property name="_APPDOMAIN" value="Unity Child Domain" />
         <property name="platform" value="EditMode" />
         <property name="EditorOnly" value="True" />
       </properties>
-      <test-suite type="TestSuite" id="1014" name="Shrine" fullname="Shrine" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-11-17 00:14:13Z" end-time="2026-11-17 00:14:13Z" duration="0.093941" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <test-suite type="TestSuite" id="1014" name="Shrine" fullname="Shrine" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-11-17 00:31:04Z" end-time="2026-11-17 00:31:04Z" duration="0.097238" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
         <properties />
-        <test-suite type="TestSuite" id="1015" name="Tests" fullname="Shrine.Tests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-11-17 00:14:13Z" end-time="2026-11-17 00:14:13Z" duration="0.093440" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <test-suite type="TestSuite" id="1015" name="Tests" fullname="Shrine.Tests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-11-17 00:31:04Z" end-time="2026-11-17 00:31:04Z" duration="0.096419" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
           <properties />
-          <test-suite type="TestFixture" id="1001" name="BattleModelTests" fullname="Shrine.Tests.BattleModelTests" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-11-17 00:14:13Z" end-time="2026-11-17 00:14:13Z" duration="0.090713" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <test-suite type="TestFixture" id="1001" name="BattleModelTests" fullname="Shrine.Tests.BattleModelTests" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-11-17 00:31:04Z" end-time="2026-11-17 00:31:04Z" duration="0.093401" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
             <properties />
-            <test-case id="1010" name="Blessing_SpendsFavour_AndAppliesPatronEffect" fullname="Shrine.Tests.BattleModelTests.Blessing_SpendsFavour_AndAppliesPatronEffect" methodname="Blessing_SpendsFavour_AndAppliesPatronEffect" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="488039633" result="Passed" start-time="2026-11-17 00:14:13Z" end-time="2026-11-17 00:14:13Z" duration="0.037137" asserts="0">
+            <test-case id="1010" name="Blessing_SpendsFavour_AndAppliesPatronEffect" fullname="Shrine.Tests.BattleModelTests.Blessing_SpendsFavour_AndAppliesPatronEffect" methodname="Blessing_SpendsFavour_AndAppliesPatronEffect" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="1435580697" result="Passed" start-time="2026-11-17 00:31:04Z" end-time="2026-11-17 00:31:04Z" duration="0.037969" asserts="0">
               <properties>
                 <property name="retryIteration" value="0" />
                 <property name="repeatIteration" value="0" />
               </properties>
             </test-case>
-            <test-case id="1007" name="Combat_EarthIgnoresFirstHit" fullname="Shrine.Tests.BattleModelTests.Combat_EarthIgnoresFirstHit" methodname="Combat_EarthIgnoresFirstHit" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="328406867" result="Passed" start-time="2026-11-17 00:14:13Z" end-time="2026-11-17 00:14:13Z" duration="0.002141" asserts="0">
+            <test-case id="1007" name="Combat_EarthIgnoresFirstHit" fullname="Shrine.Tests.BattleModelTests.Combat_EarthIgnoresFirstHit" methodname="Combat_EarthIgnoresFirstHit" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="120060331" result="Passed" start-time="2026-11-17 00:31:04Z" end-time="2026-11-17 00:31:04Z" duration="0.002328" asserts="0">
               <properties>
                 <property name="retryIteration" value="0" />
                 <property name="repeatIteration" value="0" />
               </properties>
             </test-case>
-            <test-case id="1006" name="Combat_FireDealsDoubleDamageToAir" fullname="Shrine.Tests.BattleModelTests.Combat_FireDealsDoubleDamageToAir" methodname="Combat_FireDealsDoubleDamageToAir" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="515410571" result="Passed" start-time="2026-11-17 00:14:13Z" end-time="2026-11-17 00:14:13Z" duration="0.001028" asserts="0">
+            <test-case id="1006" name="Combat_FireDealsDoubleDamageToAir" fullname="Shrine.Tests.BattleModelTests.Combat_FireDealsDoubleDamageToAir" methodname="Combat_FireDealsDoubleDamageToAir" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="1322269696" result="Passed" start-time="2026-11-17 00:31:04Z" end-time="2026-11-17 00:31:04Z" duration="0.001079" asserts="0">
               <properties>
                 <property name="retryIteration" value="0" />
                 <property name="repeatIteration" value="0" />
               </properties>
             </test-case>
-            <test-case id="1009" name="EndTurn_CyclesSides_AndGrowsManaOnNewRound" fullname="Shrine.Tests.BattleModelTests.EndTurn_CyclesSides_AndGrowsManaOnNewRound" methodname="EndTurn_CyclesSides_AndGrowsManaOnNewRound" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="736887364" result="Passed" start-time="2026-11-17 00:14:13Z" end-time="2026-11-17 00:14:13Z" duration="0.002184" asserts="0">
+            <test-case id="1009" name="EndTurn_CyclesSides_AndGrowsManaOnNewRound" fullname="Shrine.Tests.BattleModelTests.EndTurn_CyclesSides_AndGrowsManaOnNewRound" methodname="EndTurn_CyclesSides_AndGrowsManaOnNewRound" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="681460323" result="Passed" start-time="2026-11-17 00:31:04Z" end-time="2026-11-17 00:31:04Z" duration="0.005266" asserts="0">
               <properties>
                 <property name="retryIteration" value="0" />
                 <property name="repeatIteration" value="0" />
               </properties>
             </test-case>
-            <test-case id="1008" name="Offering_GrantsFavour_AndDrawsReplacement" fullname="Shrine.Tests.BattleModelTests.Offering_GrantsFavour_AndDrawsReplacement" methodname="Offering_GrantsFavour_AndDrawsReplacement" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="1358708077" result="Passed" start-time="2026-11-17 00:14:13Z" end-time="2026-11-17 00:14:13Z" duration="0.000677" asserts="0">
+            <test-case id="1008" name="Offering_GrantsFavour_AndDrawsReplacement" fullname="Shrine.Tests.BattleModelTests.Offering_GrantsFavour_AndDrawsReplacement" methodname="Offering_GrantsFavour_AndDrawsReplacement" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="524719477" result="Passed" start-time="2026-11-17 00:31:04Z" end-time="2026-11-17 00:31:04Z" duration="0.002326" asserts="0">
               <properties>
                 <property name="retryIteration" value="0" />
                 <property name="repeatIteration" value="0" />
               </properties>
             </test-case>
-            <test-case id="1012" name="OpponentAI_DoesNotActOnPlayerTurn" fullname="Shrine.Tests.BattleModelTests.OpponentAI_DoesNotActOnPlayerTurn" methodname="OpponentAI_DoesNotActOnPlayerTurn" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="135629254" result="Passed" start-time="2026-11-17 00:14:13Z" end-time="2026-11-17 00:14:13Z" duration="0.001476" asserts="0">
+            <test-case id="1012" name="OpponentAI_DoesNotActOnPlayerTurn" fullname="Shrine.Tests.BattleModelTests.OpponentAI_DoesNotActOnPlayerTurn" methodname="OpponentAI_DoesNotActOnPlayerTurn" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="1206423267" result="Passed" start-time="2026-11-17 00:31:04Z" end-time="2026-11-17 00:31:04Z" duration="0.002301" asserts="0">
               <properties>
                 <property name="retryIteration" value="0" />
                 <property name="repeatIteration" value="0" />
               </properties>
             </test-case>
-            <test-case id="1004" name="PlayCard_RejectsWhenManaIsInsufficient" fullname="Shrine.Tests.BattleModelTests.PlayCard_RejectsWhenManaIsInsufficient" methodname="PlayCard_RejectsWhenManaIsInsufficient" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="1101413180" result="Passed" start-time="2026-11-17 00:14:13Z" end-time="2026-11-17 00:14:13Z" duration="0.006925" asserts="0">
+            <test-case id="1004" name="PlayCard_RejectsWhenManaIsInsufficient" fullname="Shrine.Tests.BattleModelTests.PlayCard_RejectsWhenManaIsInsufficient" methodname="PlayCard_RejectsWhenManaIsInsufficient" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="1699105061" result="Passed" start-time="2026-11-17 00:31:04Z" end-time="2026-11-17 00:31:04Z" duration="0.001927" asserts="0">
               <properties>
                 <property name="retryIteration" value="0" />
                 <property name="repeatIteration" value="0" />
               </properties>
             </test-case>
-            <test-case id="1005" name="PlayCard_SpendsMana_AndGrantsFavourForFavouredElement" fullname="Shrine.Tests.BattleModelTests.PlayCard_SpendsMana_AndGrantsFavourForFavouredElement" methodname="PlayCard_SpendsMana_AndGrantsFavourForFavouredElement" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="1671501160" result="Passed" start-time="2026-11-17 00:14:13Z" end-time="2026-11-17 00:14:13Z" duration="0.001098" asserts="0">
+            <test-case id="1005" name="PlayCard_SpendsMana_AndGrantsFavourForFavouredElement" fullname="Shrine.Tests.BattleModelTests.PlayCard_SpendsMana_AndGrantsFavourForFavouredElement" methodname="PlayCard_SpendsMana_AndGrantsFavourForFavouredElement" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="2013292296" result="Passed" start-time="2026-11-17 00:31:04Z" end-time="2026-11-17 00:31:04Z" duration="0.000731" asserts="0">
               <properties>
                 <property name="retryIteration" value="0" />
                 <property name="repeatIteration" value="0" />
               </properties>
             </test-case>
-            <test-case id="1011" name="SeededRandom_ProducesIdenticalDraws" fullname="Shrine.Tests.BattleModelTests.SeededRandom_ProducesIdenticalDraws" methodname="SeededRandom_ProducesIdenticalDraws" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="1926720877" result="Passed" start-time="2026-11-17 00:14:13Z" end-time="2026-11-17 00:14:13Z" duration="0.001640" asserts="0">
+            <test-case id="1011" name="SeededRandom_ProducesIdenticalDraws" fullname="Shrine.Tests.BattleModelTests.SeededRandom_ProducesIdenticalDraws" methodname="SeededRandom_ProducesIdenticalDraws" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="1825605638" result="Passed" start-time="2026-11-17 00:31:04Z" end-time="2026-11-17 00:31:04Z" duration="0.001340" asserts="0">
               <properties>
                 <property name="retryIteration" value="0" />
                 <property name="repeatIteration" value="0" />
               </properties>
             </test-case>
-            <test-case id="1002" name="Start_DrawsOpeningHands_AndPlayerActsFirst" fullname="Shrine.Tests.BattleModelTests.Start_DrawsOpeningHands_AndPlayerActsFirst" methodname="Start_DrawsOpeningHands_AndPlayerActsFirst" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="2030057744" result="Passed" start-time="2026-11-17 00:14:13Z" end-time="2026-11-17 00:14:13Z" duration="0.000548" asserts="0">
+            <test-case id="1002" name="Start_DrawsOpeningHands_AndPlayerActsFirst" fullname="Shrine.Tests.BattleModelTests.Start_DrawsOpeningHands_AndPlayerActsFirst" methodname="Start_DrawsOpeningHands_AndPlayerActsFirst" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="1228963207" result="Passed" start-time="2026-11-17 00:31:04Z" end-time="2026-11-17 00:31:04Z" duration="0.000521" asserts="0">
               <properties>
                 <property name="retryIteration" value="0" />
                 <property name="repeatIteration" value="0" />
               </properties>
             </test-case>
-            <test-case id="1003" name="Start_GuaranteesAtLeastOneAffordableCard" fullname="Shrine.Tests.BattleModelTests.Start_GuaranteesAtLeastOneAffordableCard" methodname="Start_GuaranteesAtLeastOneAffordableCard" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="788432001" result="Passed" start-time="2026-11-17 00:14:13Z" end-time="2026-11-17 00:14:13Z" duration="0.001571" asserts="0">
+            <test-case id="1003" name="Start_GuaranteesAtLeastOneAffordableCard" fullname="Shrine.Tests.BattleModelTests.Start_GuaranteesAtLeastOneAffordableCard" methodname="Start_GuaranteesAtLeastOneAffordableCard" classname="Shrine.Tests.BattleModelTests" runstate="Runnable" seed="790850362" result="Passed" start-time="2026-11-17 00:31:04Z" end-time="2026-11-17 00:31:04Z" duration="0.001281" asserts="0">
               <properties>
                 <property name="retryIteration" value="0" />
                 <property name="repeatIteration" value="0" />
