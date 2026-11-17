@@ -67,7 +67,57 @@ namespace Shrine.VFX
             Burst(parent, position, accent, heavy ? 22 : 12);
             Burst(parent, position, ShrinePalette.WithAlpha(ShrinePalette.Candlelight, 0.9f),
                 heavy ? 10 : 5);
-            DamageNumber(parent, position, damage, heavy);
+            DamageNumber(parent, position, damage, heavy, Color.Lerp(accent, Color.white, 0.35f));
+        }
+
+        /// <summary>
+        /// Light trail between attacker and target. Reads as the swing itself, so the
+        /// player can follow who hit whom even when both cards are the same colour.
+        /// </summary>
+        public void Trail(Transform parent, Vector2 from, Vector2 to, Color color)
+        {
+            float length = Vector2.Distance(from, to);
+            if (length < 8f) return;
+            RectTransform rect = UiKit.Centered(parent, "StrikeTrail",
+                new Vector2(length, 30f), (from + to) * 0.5f);
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.localRotation = Quaternion.Euler(0f, 0f,
+                Mathf.Atan2(to.y - from.y, to.x - from.x) * Mathf.Rad2Deg);
+            var image = rect.gameObject.AddComponent<Image>();
+            image.sprite = ProceduralArt.Streak();
+            image.color = ShrinePalette.WithAlpha(color, 0f);
+            image.raycastTarget = false;
+            Sequence sequence = DOTween.Sequence();
+            sequence.Append(image.DOFade(0.85f, 0.06f));
+            sequence.Append(image.DOFade(0f, 0.20f).SetEase(Ease.InQuad));
+            sequence.Join(rect.DOScaleX(1.06f, 0.26f).SetEase(Ease.OutQuad));
+            sequence.OnComplete(() => Destroy(rect.gameObject));
+        }
+
+        /// <summary>Short battle shout: "ELEMENTAL EDGE", "KILL". Rises and fades.</summary>
+        public void Callout(Transform parent, Vector2 position, string message, Color color,
+            float size = 22f)
+        {
+            RectTransform rect = UiKit.Centered(parent, "Callout", new Vector2(360, 48),
+                position + new Vector2(0f, 26f));
+            var group = rect.gameObject.AddComponent<CanvasGroup>();
+            group.blocksRaycasts = false;
+            TextMeshProUGUI shadow = UiKit.Text(rect, "Shadow", message, size,
+                ShrinePalette.MidnightInk, true);
+            shadow.rectTransform.anchoredPosition = new Vector2(2f, -3f);
+            shadow.alpha = 0.9f;
+            TextMeshProUGUI text = UiKit.Text(rect, "Text", message, size, color, true);
+            text.fontStyle = FontStyles.Bold;
+            text.characterSpacing = 6f;
+            rect.localScale = Vector3.one * 0.7f;
+            Sequence sequence = DOTween.Sequence();
+            sequence.Append(rect.DOScale(1.05f, 0.12f).SetEase(Ease.OutBack, 2.2f));
+            sequence.Join(group.DOFade(1f, 0.08f));
+            sequence.Append(rect.DOScale(1f, 0.10f));
+            sequence.Join(rect.DOAnchorPos(position + new Vector2(0f, 74f), 0.62f)
+                .SetEase(Ease.OutCubic));
+            sequence.Insert(0.30f, group.DOFade(0f, 0.32f));
+            sequence.OnComplete(() => Destroy(rect.gameObject));
         }
 
         /// <summary>Expanding shockwave circle.</summary>

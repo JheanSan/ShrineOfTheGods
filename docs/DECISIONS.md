@@ -57,3 +57,14 @@ Short log. Newest last. Format: date — decision — options — reason.
   painted art, and reuse the three existing paintings. New paintings may be added
   later only if they match the Style Bible's detail level.
 - Consequences: no mismatched AI art; every card is visually complete on day one.
+
+## 2026-11-17 — Rival opens with one guardian on the field
+- Options: leave the first-player advantage alone, give the rival an extra card or
+  extra mana, or deploy a body for it before the first turn.
+- Decision: deploy the rival's strongest opening card onto its field. The pilgrim acts
+  first and a shrine can only be struck while its board is empty, so without a body the
+  pilgrim gets a free shrine hit on turn one and the rival spends the game behind.
+- Consequences: the rival starts with three cards in hand and one body on the field;
+  `BalanceConfig.StartingGuardians` controls the count (0 disables it for tests). The
+  rival's opening board is now a real obstacle, and the autobattle harness produces
+  rival wins instead of clean sweeps.

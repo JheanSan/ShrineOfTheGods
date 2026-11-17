@@ -5,6 +5,61 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Phase 8 — Combat overhaul, element identity and a planning rival
+#### Added
+- `ElementRules`: the elemental cycle in one place (`Fire > Air > Earth > Water >
+  Fire`). Attacker damage and retaliation both double across an advantage, and the
+  AI, card ribbon, legend and tooltip all read the same table.
+- Element-coloured card faces: a full-width ribbon with the element glyph and the
+  element it defeats (`EARTH > WATER`), a sigil watermark over the art and an
+  element-tinted frame.
+- Per-element painted card scenes in `ProceduralCardScenes`: molten river and ember
+  sky, moonlit waves and rain, stone pillars and dust, floating islands and wind
+  streaks, each with a seeded creature silhouette.
+- Combat forecast panel: while a field card is dragged it shows damage, `KILL`,
+  reply damage and whether the card dies, plus the `DOUBLE DAMAGE` line when the
+  cycle applies.
+- Persistent `ELEMENT CYCLE` legend under the rival plate.
+- Element-tinted combat feedback: trails between attacker and target, tinted damage
+  numerals, `ELEMENTAL EDGE` callout and a tinted impact ring.
+- `AiTuning` with `Measured` / `Aggressive` / `Merciless` presets, an exhaustive
+  affordable-hand search, planned-damage tracking per defender, attacks with cards
+  played the same turn, and leftovers sent at the shrine after the board is cleared
+  (see `docs/AI_GUIDE.md`).
+- `ElementRulesTests` and a leftover-attacker AI test.
+
+#### Changed
+- Card face layout rebuilt around the element band: name plate on top, art well,
+  element ribbon, labelled ATK/LIFE gems.
+- Deck curve flattened: the 6–8 cost cards were traps that left both sides with
+  unplayable hands (a 5/4 Chimera cost 8, an equal Gorgon 8, while a 5/3 Phoenix
+  cost 2). Costs now run 2–6, so every opening hand has a play and the rival can
+  actually spend its mana. Regenerated card assets with the scene builder.
+- The rival now values its board: it holds an attack that kills nothing and costs
+  it a body, sorts attackers biggest-first, prefers the element that beats the
+  player's board (`ElementEdgeBonus`) and only accepts a death for a kill. This is
+  what turned the old "trade everything, empty field, lose" behaviour around.
+- The rival opens with its cheapest card already on the field (a guardian) as
+  second-player compensation, taken before the playable-hand guarantee so its
+  opening hand stays affordable.
+- `BattleScreen` combat now colours every effect by the striking element and the
+  reply by the defender's element.
+- `BattleRecorder` also captures a `strike_NN` frame 0.16 s after each action so
+  trails, callouts and numerals can be verified in stills.
+
+#### Fixed
+- Card ribbon labels were clipped: the element tag, `ATK` and `LIFE` labels used
+  text rects barely taller than the glyphs. Small labels now overflow instead of
+  truncating, and the tag sits flush inside the ribbon in full ink.
+- The playable-opening-hand guarantee could fail when the rival's random draw pile
+  held no cheap card; it now falls back to the catalogue.
+- Only fire doubled into air; water, earth and air advantages did nothing. All four
+  now double, including retaliation.
+- Earth's first strike at a shrine dealt **0** damage and consumed its defensive
+  power. It now deals full damage; the power stays a defensive reaction.
+- `ProceduralArt.CardEmblem` and the old single-scene generator were removed in
+  favour of the element scenes; no external art was added.
+
 ### Phase 7 — Clarity, presence and full-battle verification
 #### Added
 - Painted card art: every card gets its own seeded shrine landscape (moon,

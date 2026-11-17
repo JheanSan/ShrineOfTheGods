@@ -44,6 +44,13 @@ namespace Shrine.Gameplay
         /// <summary>Score per point of attack removed from the opposing board.</summary>
         public float ThreatWeight = 0.6f;
 
+        /// <summary>
+        /// Bonus for playing a card whose element beats the strongest card the player
+        /// already has on the board, so the rival contests the cycle instead of
+        /// dumping raw stats.
+        /// </summary>
+        public float ElementEdgeBonus = 1.5f;
+
         /// <summary>Score lost per point of stats when our attacker dies to retaliation.</summary>
         public float LossPenalty = 0.6f;
 
@@ -99,11 +106,14 @@ namespace Shrine.Gameplay
                         DefenseWeight = 0.8f,
                         StatWeight = 0.9f,
                         ValuePerManaWeight = 2.4f,
-                        KillBonus = 4.5f,
-                        ThreatWeight = 0.8f,
-                        LossPenalty = 0.35f,
-                        WastePenalty = 1.5f,
-                        MinimumAttackScore = -3f,
+                        KillBonus = 5.0f,
+                        ThreatWeight = 0.9f,
+                        ElementEdgeBonus = 2.2f,
+                        // It keeps a board. Dying is only worth it for a kill, because an
+                        // empty field lets the player walk straight to the shrine.
+                        LossPenalty = 1.2f,
+                        WastePenalty = 4.0f,
+                        MinimumAttackScore = 0.5f,
                         BehindBoardBonus = 1.1f,
                         LowHealth = 16,
                         LowHealthAggression = 1.9f,

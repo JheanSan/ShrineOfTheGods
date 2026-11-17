@@ -118,6 +118,9 @@ namespace Shrine.Gameplay
                 Draw(Side.Player);
                 Draw(Side.Opponent);
             }
+            // The guardian leaves the rival's opening hand first, so the playable-hand
+            // guarantee below still applies to the cards that remain.
+            DeployGuardians(_opponent);
             EnsurePlayableOpeningHand(_player);
             EnsurePlayableOpeningHand(_opponent);
             RollOmen();
@@ -126,9 +129,40 @@ namespace Shrine.Gameplay
             Log?.Invoke("The shrine opens. The pilgrim acts first.");
         }
 
+        /// <summary>
+        /// The rival is the resident power, so it opens with a body already on the
+        /// field. The pilgrim acts first and could otherwise strike a naked shrine on
+        /// turn one; this is the second-player compensation.
+        ///
+        /// The guardian is the **cheapest** card in hand, never the best one: a bomb on
+        /// turn one decides the game before it starts, while a modest body only denies
+        /// the free hit and leaves the rival's curve intact.
+        /// </summary>
+        private void DeployGuardians(Participant rival)
+        {
+            int count = Mathf.Clamp(_balance.StartingGuardians, 0, _balance.MaxFieldSize);
+            while (count-- > 0 && rival.Hand.Count > 0 && rival.Field.Count < _balance.MaxFieldSize)
+            {
+                CardInstance guard = rival.Hand[0];
+                foreach (CardInstance card in rival.Hand)
+                    if (card.Data.ManaCost < guard.Data.ManaCost
+                        || (card.Data.ManaCost == guard.Data.ManaCost
+                            && card.Data.Defense > guard.Data.Defense))
+                        guard = card;
+
+                rival.Hand.Remove(guard);
+                rival.Field.Add(guard);
+                Log?.Invoke($"A guardian already holds the rival shrine: {guard.Data.DisplayName}.");
+            }
+        }
+
         public Participant ParticipantFor(Side side) => side == Side.Player ? _player : _opponent;
 
-        /// <summary>Avoids a dead opening hand where every card costs more than starting mana.</summary>
+        /// <summary>
+        /// Avoids a dead opening hand where every card costs more than starting mana.
+        /// Prefers a swap with the draw pile, and falls back to the catalogue so a pile
+        /// that happens to hold no cheap card can never produce an unplayable opening.
+        /// </summary>
         private void EnsurePlayableOpeningHand(Participant participant)
         {
             CardInstance cheapest = null;
@@ -136,15 +170,44 @@ namespace Shrine.Gameplay
                 if (cheapest == null || card.Data.ManaCost < cheapest.Data.ManaCost)
                     cheapest = card;
             if (cheapest == null || cheapest.Data.ManaCost <= _balance.StartingMana) return;
-            if (participant.DrawPile.Count == 0) return;
 
-            int cheapestIndex = 0;
-            for (int i = 1; i < participant.DrawPile.Count; i++)
-                if (participant.DrawPile[i].ManaCost < participant.DrawPile[cheapestIndex].ManaCost)
-                    cheapestIndex = i;
-            CardData affordable = participant.DrawPile[cheapestIndex];
-            participant.DrawPile[cheapestIndex] = cheapest.Data;
+            CardData affordable = default(CardData);
+            bool found = false;
+            bool fromDrawPile = false;
+            if (participant.DrawPile.Count > 0)
+            {
+                int cheapestIndex = 0;
+                for (int i = 1; i < participant.DrawPile.Count; i++)
+                    if (participant.DrawPile[i].ManaCost
+                        < participant.DrawPile[cheapestIndex].ManaCost)
+                        cheapestIndex = i;
+                if (participant.DrawPile[cheapestIndex].ManaCost <= _balance.StartingMana)
+                {
+                    affordable = participant.DrawPile[cheapestIndex];
+                    participant.DrawPile[cheapestIndex] = cheapest.Data;
+                    found = true;
+                    fromDrawPile = true;
+                }
+            }
+
+            if (!found)
+            {
+                foreach (CardData card in _catalog)
+                {
+                    if (card.ManaCost > _balance.StartingMana) continue;
+                    if (!found || card.ManaCost < affordable.ManaCost)
+                    {
+                        affordable = card;
+                        found = true;
+                    }
+                }
+            }
+            if (!found) return;
+
             participant.Hand.Remove(cheapest);
+            // Keep the pile size honest when the affordable card came from the
+            // catalogue rather than a swap.
+            if (!fromDrawPile) participant.DrawPile.Add(cheapest.Data);
             var replacement = new CardInstance(affordable);
             if (_currentOmen.DefenseBonus > 0) replacement.ModifyDefense(_currentOmen.DefenseBonus);
             participant.Hand.Add(replacement);
@@ -216,9 +279,7 @@ namespace Shrine.Gameplay
                 int damage = EffectiveAttack(card, target, side);
                 bool died = target.TakeDamage(damage);
 
-                int retaliation = target.Data.Attack;
-                if (target.Data.Element == ElementKind.Fire && card.Data.Element == ElementKind.Air)
-                    retaliation *= 2;
+                int retaliation = RetaliationDamage(card, target);
                 if (card.Data.Element == ElementKind.Earth && !card.HasUsedPower)
                 {
                     card.MarkPowerUsed();
@@ -234,20 +295,16 @@ namespace Shrine.Gameplay
                 }
 
                 CombatResolved?.Invoke(card, side, target, Other(side), damage, retaliation);
-                Log?.Invoke($"{card.Data.DisplayName} strikes {target.Data.DisplayName} for {damage}.");
+                string edge = ElementRules.HasAdvantage(card.Data.Element, target.Data.Element)
+                    ? $" ({card.Data.Element} > {target.Data.Element})"
+                    : string.Empty;
+                Log?.Invoke($"{card.Data.DisplayName} strikes {target.Data.DisplayName} for {damage}{edge}.");
                 if (died) DestroyCard(target, Other(side));
                 if (attackerDied) DestroyCard(card, side);
             }
             else
             {
-                int damage = card.Data.Attack + (card.Data.Element == ElementKind.Fire ? _currentOmen.AttackBonus : 0)
-                    + _currentOmen.DirectDamageBonus;
-                if (card.Data.Element == ElementKind.Earth && !card.HasUsedPower)
-                {
-                    card.MarkPowerUsed();
-                    card.ModifyDefense(2);
-                    damage = 0;
-                }
+                int damage = HeroDamage(card);
                 ApplyHeroDamage(defender, damage);
                 HeroDamaged?.Invoke(card, Other(side), damage);
                 Log?.Invoke($"{card.Data.DisplayName} strikes the shrine for {damage}.");
@@ -367,15 +424,37 @@ namespace Shrine.Gameplay
             return cost;
         }
 
-        /// <summary>Damage an attacker would deal to a card, omens included. Used by the AI and the UI preview.</summary>
+        /// <summary>Damage an attacker would deal to a card, omens and the element cycle included.</summary>
         public int EffectiveAttack(CardInstance attacker, CardInstance defender, Side side)
         {
             int damage = attacker.Data.Attack;
-            if (attacker.Data.Element == ElementKind.Fire && defender.Data.Element == ElementKind.Air)
-                damage *= 2;
+            if (ElementRules.HasAdvantage(attacker.Data.Element, defender.Data.Element))
+                damage *= ElementRules.AdvantageMultiplier;
             if (attacker.Data.Element == ElementKind.Fire)
                 damage += _currentOmen.AttackBonus;
             return damage;
+        }
+
+        /// <summary>Damage this card would deal straight to a shrine, omen bonuses included.</summary>
+        public int HeroDamage(CardInstance attacker)
+        {
+            return attacker.Data.Attack
+                + (attacker.Data.Element == ElementKind.Fire ? _currentOmen.AttackBonus : 0)
+                + _currentOmen.DirectDamageBonus;
+        }
+
+        /// <summary>
+        /// Damage a defender deals back after being struck. Mirrors <see cref="Attack"/>
+        /// so the AI and the combat forecast can predict a trade without replaying it.
+        /// </summary>
+        public int RetaliationDamage(CardInstance attacker, CardInstance target)
+        {
+            int retaliation = target.Data.Attack;
+            if (ElementRules.HasAdvantage(target.Data.Element, attacker.Data.Element))
+                retaliation *= ElementRules.AdvantageMultiplier;
+            if (attacker.Data.Element == ElementKind.Earth && !attacker.HasUsedPower)
+                retaliation = 0;
+            return retaliation;
         }
 
         private void ApplyHeroDamage(Participant target, int amount)

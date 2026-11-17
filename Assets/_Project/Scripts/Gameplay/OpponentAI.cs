@@ -155,8 +155,27 @@ namespace Shrine.Gameplay
 
             float value = attack * _tuning.AttackWeight + defense * _tuning.DefenseWeight;
             float efficiency = value / Math.Max(1, cost);
+            float edge = ElementEdge(card);
             float jitter = (float)_random.NextDouble() * _tuning.TieBreakJitter;
-            return value * _tuning.StatWeight + efficiency * _tuning.ValuePerManaWeight + jitter;
+            return value * _tuning.StatWeight + efficiency * _tuning.ValuePerManaWeight
+                + edge + jitter;
+        }
+
+        /// <summary>
+        /// How well this card's element answers the biggest threat on the player's side.
+        /// Doubling into the largest body is worth more than a marginally bigger stat line.
+        /// </summary>
+        private float ElementEdge(CardInstance card)
+        {
+            int bestThreat = 0;
+            foreach (CardInstance defender in _model.Player.Field)
+            {
+                if (!ElementRules.HasAdvantage(card.Data.Element, defender.Data.Element))
+                    continue;
+                bestThreat = Math.Max(bestThreat, defender.Data.Attack + defender.CurrentDefense);
+            }
+
+            return bestThreat * _tuning.ElementEdgeBonus * 0.25f;
         }
 
         /// <summary>
@@ -177,6 +196,9 @@ namespace Shrine.Gameplay
 
             var attackers = new List<CardInstance>(rival.Field);
             if (_tuning.AttackWithNewCards) attackers.AddRange(fresh);
+            // Biggest swing first: a kill removes the target for everyone after, so the
+            // smaller attackers are never wasted chipping a card that was going to die.
+            attackers.Sort((a, b) => b.Data.Attack.CompareTo(a.Data.Attack));
 
             foreach (CardInstance attacker in attackers)
             {
@@ -253,15 +275,10 @@ namespace Shrine.Gameplay
             return true;
         }
 
-        /// <summary>Mirrors the retaliation rules in <see cref="BattleModel.Attack"/>.</summary>
-        private static bool WouldDieToRetaliation(CardInstance attacker, CardInstance target)
+        /// <summary>Delegates to the model so the planner can never invent its own combat maths.</summary>
+        private bool WouldDieToRetaliation(CardInstance attacker, CardInstance target)
         {
-            int retaliation = target.Data.Attack;
-            if (target.Data.Element == ElementKind.Fire && attacker.Data.Element == ElementKind.Air)
-                retaliation *= 2;
-            if (attacker.Data.Element == ElementKind.Earth && !attacker.HasUsedPower)
-                retaliation = 0;
-            return retaliation >= attacker.CurrentDefense;
+            return _model.RetaliationDamage(attacker, target) >= attacker.CurrentDefense;
         }
 
         private static string Describe(List<BattleAction> actions)

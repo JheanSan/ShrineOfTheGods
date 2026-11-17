@@ -27,15 +27,45 @@ namespace Shrine.UI
             return color;
         }
 
+        /// <summary>Hex body without '#', for colour tags in rich text.</summary>
+        public static string Rgb(Color color) => ColorUtility.ToHtmlStringRGB(color);
+
+        // Element hues are deliberately more saturated than the stone palette: on a
+        // 172 px card the element must be readable before any text is.
+        public static readonly Color EmberOrange = Hex("E0613F");
+        public static readonly Color DeepTide = Hex("3E9FC4");
+        public static readonly Color OchreStone = Hex("C8A34A");
+        public static readonly Color PaleGale = Hex("BFD4E8");
+
         public static Color Element(Shrine.Data.ElementKind element)
         {
             switch (element)
             {
-                case Shrine.Data.ElementKind.Fire: return BloodEmber;
-                case Shrine.Data.ElementKind.Water: return SpiritCyan;
-                case Shrine.Data.ElementKind.Earth: return EmberGold;
-                default: return AmethystHaze;
+                case Shrine.Data.ElementKind.Fire: return EmberOrange;
+                case Shrine.Data.ElementKind.Water: return DeepTide;
+                case Shrine.Data.ElementKind.Earth: return OchreStone;
+                default: return PaleGale;
             }
+        }
+
+        /// <summary>Near-black version of the element hue, for art backgrounds and shadows.</summary>
+        public static Color ElementDeep(Shrine.Data.ElementKind element)
+        {
+            return Color.Lerp(Element(element), MidnightInk, 0.78f);
+        }
+
+        /// <summary>Brightened element hue for glows, glyphs and damage numerals.</summary>
+        public static Color ElementBright(Shrine.Data.ElementKind element)
+        {
+            return Color.Lerp(Element(element), Color.white, 0.22f);
+        }
+
+        /// <summary>Text colour that stays readable on top of the element hue.</summary>
+        public static Color ElementInk(Shrine.Data.ElementKind element)
+        {
+            Color c = Element(element);
+            float luminance = 0.2126f * c.r + 0.7152f * c.g + 0.0722f * c.b;
+            return luminance > 0.42f ? MidnightInk : BoneParchment;
         }
 
         public static Color WithAlpha(Color color, float alpha)

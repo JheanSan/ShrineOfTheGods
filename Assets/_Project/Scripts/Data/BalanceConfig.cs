@@ -17,6 +17,9 @@ namespace Shrine.Data
         [SerializeField] private int _maxFieldSize = 5;
         [SerializeField] private int _deckSize = 8;
         [SerializeField] private int _copiesPerCard = 3;
+        [Tooltip("Bodies the rival already has on the field at the first dawn. The pilgrim " +
+                 "acts first, so this is the second-player compensation.")]
+        [SerializeField] private int _startingGuardians = 1;
 
         [Header("Divine favour")]
         [SerializeField] private int _favourMax = 100;
@@ -34,6 +37,7 @@ namespace Shrine.Data
         public int StartingHandSize => _startingHandSize;
         public int MaxHandSize => _maxHandSize;
         public int MaxFieldSize => _maxFieldSize;
+        public int StartingGuardians => _startingGuardians;
         public int DeckSize => _deckSize;
         public int CopiesPerCard => _copiesPerCard;
         public int FavourMax => _favourMax;
@@ -51,6 +55,7 @@ namespace Shrine.Data
             _startingHandSize = 4;
             _maxHandSize = 8;
             _maxFieldSize = 5;
+            _startingGuardians = 1;
             _deckSize = 8;
             _copiesPerCard = 3;
             _favourMax = 100;

@@ -18,6 +18,6 @@ MonoBehaviour:
     Element: 2
     Attack: 5
     Defense: 4
-    ManaCost: 8
+    ManaCost: 6
     Lore: A gorgon whose gaze turns belief into stone.
     ArtResourcePath: 

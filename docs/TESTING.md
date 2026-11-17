@@ -28,9 +28,13 @@ A test run passes only when every test passes and the log contains no `error CS`
 
 ### Battle
 - [ ] Player always starts; turn banner matches state.
-- [ ] Mana starts at 1, grows to 10, refills each round.
+- [ ] Mana starts at 2, grows to 10, refills each round.
 - [ ] Card cannot be played without mana; message is clear.
 - [ ] Field card attacks once per turn; exhausted cards dim.
+- [ ] Element ribbon, glyph and `> TARGET` tag are readable on every card.
+- [ ] `ELEMENT CYCLE` legend stays visible and matches the tooltip arrows.
+- [ ] Dragging an attacker over a card shows damage, `KILL`, reply and death.
+- [ ] A doubled strike shows `ELEMENTAL EDGE` and a doubled numeral.
 - [ ] Combat math matches the rules; elemental effects trigger once.
 - [ ] Favour fills from favoured cards/offerings; blessing spends it once.
 - [ ] Omen announced every round and its rule is visible in the tooltip.
@@ -51,6 +55,8 @@ A test run passes only when every test passes and the log contains no `error CS`
 | 0 | 2026-11-16 | n/a | n/a | original loads | Baseline; battle crashed with empty deck. |
 | 1–2 | 2026-11-16 | n/a | n/a | title/covenant/battle | Fixed frames, raycasts, layout and overlays. |
 | 3–5 | 2026-11-17 | **11/11 passed** | **2/2 passed** | title → covenant → battle → play card → AI turn → tooltip | Zero compiler errors/warnings; player build succeeds. |
+| 6–7 | 2026-11-17 | **22/22 passed** | **2/2 passed** | full autobattles via `-autobattle` | Rival planner verified; both endings screenshotted. |
+| 8 | 2026-11-17 | **32/32 passed** | **2/2 passed** | autobattle series with strike frames | Element cycle, forecast, legend, guardian and Earth fix verified in stills. |
 
 Test result files: `TestResults/editmode.xml`, `TestResults/playmode.xml`.
 Coverage: turn flow, mana gating, elemental combat, least-damage rules, offerings,

@@ -67,7 +67,7 @@ namespace Shrine.UI
                     ? ShrinePalette.WithAlpha(ShrinePalette.MoonSilver, 0.10f)
                     : filled
                         ? Color.Lerp(ShrinePalette.SpiritCyan, ShrinePalette.Candlelight, 0.35f)
-                        : ShrinePalette.WithAlpha(ShrinePalette.SpiritCyan, 0.34f);
+                        : ShrinePalette.WithAlpha(ShrinePalette.SpiritCyan, 0.20f);
                 socket.color = unlocked
                     ? ShrinePalette.WithAlpha(ShrinePalette.DeepBronze, 0.95f)
                     : ShrinePalette.WithAlpha(ShrinePalette.DeepBronze, 0.30f);

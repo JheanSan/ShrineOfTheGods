@@ -60,8 +60,9 @@ result without inspecting a screenshot.
 `docs/TASKS.md` backlog · `docs/DECISIONS.md` rationale · `docs/BUGS.md` defects ·
 `docs/IMPROVEMENT_PLAN.md` roadmap · `docs/STYLE_BIBLE.md` look ·
 `docs/ANIMATION_GUIDE.md` motion · `docs/UI_GUIDE.md` interface ·
-`docs/ARCHITECTURE.md` systems · `docs/TESTING.md` QA · `docs/PERFORMANCE.md` numbers ·
-`docs/media/` evidence · `docs/archive/` old snapshots.
+`docs/AI_GUIDE.md` rival planner and element cycle · `docs/ARCHITECTURE.md` systems ·
+`docs/TESTING.md` QA · `docs/PERFORMANCE.md` numbers · `docs/media/` evidence ·
+`docs/archive/` old snapshots.
 
 ## Session protocol
 - Start: read this file, `docs/PROGRESS.md`, `docs/TASKS.md`.

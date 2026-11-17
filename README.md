@@ -11,8 +11,16 @@ divine favour and the bargains struck at a shrine between twilight and dawn.
 ## Features
 
 - **Elemental card battles** — 19 creatures across Fire, Water, Earth and Air.
-  Play cards to the field, attack rival cards or the rival shrine, and use each
-  element's one-time power.
+  The cycle is Fire > Air > Earth > Water > Fire: strike the element you beat and
+  deal double, including double retaliation. Every card shows its element as a
+  colour band and glyph, and the live legend never leaves the screen.
+- **Readable combat** — drag an attacker onto a target and the forecast states the
+  damage, the kill, the reply and whether your card dies before you commit.
+- **A rival that plans** — the opponent searches its whole affordable hand, tracks
+  planned damage so no two cards hit a corpse, refuses attacks that throw a body
+  away for nothing, and prefers the element that beats your board. It opens with a
+  guardian already on the field, because you move first. Difficulty presets live in
+  `AiTuning`; the game ships on `Merciless`.
 - **Divine Favour** — earn favour with cards of your patron's element and by
   sacrificing cards at the altar. At 100 %, invoke a patron blessing:
   cinders, tides, ash or gale.

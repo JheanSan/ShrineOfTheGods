@@ -51,3 +51,14 @@ Commits reference the short hash where the work landed.
 | T-044 | 7 | Turn plaque shows cards remaining | done | pending | Removes the duplicate "YOUR TURN" banner text. |
 | T-045 | 7 | Fix rival mana ramp, per-turn draws and AI budget | done | pending | Both sides ramp 2 to 10 and draw; AI spends a mana pool. |
 | T-046 | 7 | Autobattle recorder and full-battle verification | done | pending | Screenshot every action, both endings confirmed. |
+| T-047 | 8 | Element cycle as single source of truth, doubled both ways | done | pending | `ElementRules`, `ElementRulesTests`, model + AI delegate. |
+| T-048 | 8 | Element-first card faces | done | pending | Ribbon, glyph, defeat tag, sigil watermark, tinted frame. |
+| T-049 | 8 | Per-element painted card scenes | done | pending | Ember/tide/stone/gale backdrops, seeded creatures, no new assets. |
+| T-050 | 8 | Combat forecast, element legend, tinted combat effects | done | pending | Damage/KILL/reply/death preview, persistent cycle legend, trails and callouts. |
+| T-051 | 8 | Tunable rival planner with difficulty presets | done | `0222a20` | Subset search, planned damage, fresh-card attacks, leftovers at the shrine; `docs/AI_GUIDE.md`. |
+| T-052 | 8 | Fix Earth dealing 0 to a shrine and full-cycle combat | done | pending | Earth power is defensive only; water/earth/air now double. |
+| T-053 | 8 | Strike-frame capture in the autobattle harness | done | pending | 0.16 s after each action, so trails and numerals are verifiable. |
+| T-054 | 8 | Flatten the card cost curve (2–6) and regenerate card assets | done | pending | Removes 6–8 cost traps; both sides can spend mana from turn one. |
+| T-055 | 8 | Rival holds losing trades and values board presence | done | pending | `LossPenalty`/`WastePenalty` raised, biggest attacker first, `ElementEdgeBonus`. |
+| T-056 | 8 | Rival opening guardian as second-player compensation | done | pending | Cheapest opening card deployed before the playable-hand guarantee. |
+| T-057 | 8 | Fix clipped card labels and the opening-hand guarantee | done | pending | Small labels overflow; catalogue fallback for an unplayable pile. |

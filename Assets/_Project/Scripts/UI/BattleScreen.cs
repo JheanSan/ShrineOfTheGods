@@ -65,6 +65,10 @@ namespace Shrine.UI
         private ShrineButton _endTurn;
         private ShrineButton _blessing;
         private Image _blessingGlow;
+        private RectTransform _forecast;
+        private CanvasGroup _forecastGroup;
+        private TextMeshProUGUI _forecastTitle;
+        private TextMeshProUGUI _forecastBody;
         private Coroutine _enemyRoutine;
         private CardView _dragging;
         private bool _bound;
@@ -120,6 +124,8 @@ namespace Shrine.UI
 
             BuildArrow();
             BuildTurnBanner();
+            BuildElementLegend();
+            BuildForecast();
             App.Vfx.AmbientEmbers(transform, new Vector2(0f, -430f), 14);
         }
 
@@ -348,6 +354,64 @@ namespace Shrine.UI
             _arrow.gameObject.SetActive(false);
         }
 
+        /// <summary>
+        /// Compact cheat sheet of the elemental cycle, pinned under the rival plate.
+        /// Every fight is decided by these four arrows, so they stay on screen.
+        /// </summary>
+        private void BuildElementLegend()
+        {
+            RectTransform panel = UiKit.Centered(transform, "ElementLegend", new Vector2(380, 126),
+                new Vector2(-676f, 146f));
+            var background = panel.gameObject.AddComponent<Image>();
+            background.color = ShrinePalette.WithAlpha(ShrinePalette.MidnightInk, 0.68f);
+            background.raycastTarget = false;
+            UiKit.ImageAt(panel, "Rule", null, ShrinePalette.WithAlpha(ShrinePalette.EmberGold, 0.35f),
+                new Vector2(344, 1.5f), new Vector2(0f, 54f));
+            UiKit.TextAt(panel, "Title", "ELEMENT CYCLE", 12, ShrinePalette.MoonSilver,
+                new Vector2(344, 16), new Vector2(0f, 43f), true).characterSpacing = 4f;
+
+            ElementKind[] order =
+            {
+                ElementKind.Fire, ElementKind.Air, ElementKind.Earth, ElementKind.Water
+            };
+            for (int i = 0; i < order.Length; i++)
+            {
+                ElementKind from = order[i];
+                ElementKind to = ElementRules.Beats(from);
+                float y = 20f - i * 22f;
+                Image glyph = UiKit.ImageAt(panel, "Glyph" + i, ProceduralArt.ElementSigil(from),
+                    ShrinePalette.Element(from), Vector2.one * 18f, new Vector2(-164f, y));
+                glyph.raycastTarget = false;
+                string row = $"<color=#{ShrinePalette.Rgb(ShrinePalette.Element(from))}>"
+                    + $"{from.ToString().ToUpperInvariant()}</color> <color=#8A6538>></color> "
+                    + $"<color=#{ShrinePalette.Rgb(ShrinePalette.Element(to))}>"
+                    + $"{to.ToString().ToUpperInvariant()}</color>"
+                    + "  <size=72%><color=#B9C2D6>DOUBLE</color></size>";
+                TextMeshProUGUI label = UiKit.TextAt(panel, "Row" + i, row, 16, ShrinePalette.BoneParchment,
+                    new Vector2(326, 20), new Vector2(14f, y), false, TextAlignmentOptions.Left);
+                label.characterSpacing = 1f;
+            }
+        }
+
+        /// <summary>Reads out the maths of a strike before the card leaves the hand.</summary>
+        private void BuildForecast()
+        {
+            _forecast = UiKit.Centered(transform, "CombatForecast", new Vector2(320, 108),
+                new Vector2(760f, 214f));
+            var background = _forecast.gameObject.AddComponent<Image>();
+            background.sprite = ProceduralArt.StonePlate();
+            background.type = Image.Type.Sliced;
+            background.color = ShrinePalette.WithAlpha(Color.white, 0.97f);
+            background.raycastTarget = false;
+            _forecastGroup = _forecast.gameObject.AddComponent<CanvasGroup>();
+            _forecastGroup.blocksRaycasts = false;
+            _forecastGroup.alpha = 0f;
+            _forecastTitle = UiKit.TextAt(_forecast, "Title", string.Empty, 16, ShrinePalette.Candlelight,
+                new Vector2(288, 24), new Vector2(0f, 36f), true);
+            _forecastBody = UiKit.TextAt(_forecast, "Body", string.Empty, 14, ShrinePalette.BoneParchment,
+                new Vector2(288, 62), new Vector2(0f, -10f), false, TextAlignmentOptions.Top);
+        }
+
         private void EndPlayerTurn()
         {
             if (_model == null || _model.IsOver || _model.CurrentSide != Side.Player) return;
@@ -437,8 +501,11 @@ namespace Shrine.UI
             view.Refresh(side == Side.Player && _model.CanAttack(side, card.Uid),
                 side != Side.Player || _model.Player.Mana >= card.Data.ManaCost);
             UiAudioBus.PlayCardPlay();
-            App.Vfx.Burst(transform, ToCanvas(view.Rect), ShrinePalette.WithAlpha(ShrinePalette.EmberGold, 0.85f), 8);
-            App.Vfx.Ring(transform, ToCanvas(view.Rect), ShrinePalette.EmberGold, 0.7f);
+            // Parent the flourish to the card itself: the view is still gliding from the
+            // hand to its slot, so a canvas-space ring is left behind on an empty slot.
+            App.Vfx.Burst(view.Rect, Vector2.zero,
+                ShrinePalette.WithAlpha(ShrinePalette.EmberGold, 0.85f), 8);
+            App.Vfx.Ring(view.Rect, Vector2.zero, ShrinePalette.EmberGold, 0.7f);
         }
 
         private void OnCardDestroyed(CardInstance card, Side side)
@@ -464,23 +531,29 @@ namespace Shrine.UI
                 return;
             }
 
+            Color accent = ShrinePalette.ElementBright(attacker.Data.Element);
+            Color reply = ShrinePalette.ElementBright(target.Data.Element);
+            bool edge = ElementRules.HasAdvantage(attacker.Data.Element, target.Data.Element);
             RectTransform parent = (RectTransform)attackerView.Rect.parent;
             Vector2 targetLocal = parent.InverseTransformPoint(targetView.Rect.position);
+            Vector2 from = ToCanvas(attackerView.Rect);
+            Vector2 to = ToCanvas(targetView.Rect);
+            App.Vfx.Trail(transform, from, to, accent);
             UiAudioBus.PlayAttack();
             attackerView.PlayAttack(targetLocal, () =>
             {
-                App.Vfx.Impact(transform, ToCanvas(targetView.Rect), damage, damage >= 5,
-                    ShrinePalette.Candlelight);
-                targetView.PlayHit();
+                App.Vfx.Impact(transform, to, damage, damage >= 5, accent);
+                targetView.PlayHit(accent);
+                if (edge)
+                    App.Vfx.Callout(transform, to, "ELEMENTAL EDGE", accent, 19f);
                 UiAudioBus.PlayImpact();
                 if (retaliation > 0)
                 {
                     DOVirtual.DelayedCall(0.22f, () =>
                     {
                         if (!_views.ContainsKey(attacker.Uid) || !attackerView.gameObject.activeSelf) return;
-                        attackerView.PlayHit();
-                        App.Vfx.Impact(transform, ToCanvas(attackerView.Rect), retaliation, false,
-                            ShrinePalette.SpiritCyan);
+                        attackerView.PlayHit(reply);
+                        App.Vfx.Impact(transform, ToCanvas(attackerView.Rect), retaliation, false, reply);
                         UiAudioBus.PlayBlock();
                     });
                 }
@@ -491,24 +564,29 @@ namespace Shrine.UI
         private void OnHeroDamaged(CardInstance attacker, Side targetSide, int damage)
         {
             HeroPlate plate = targetSide == Side.Player ? _playerPlate : _rivalPlate;
-            if (_views.TryGetValue(attacker.Uid, out CardView view))
+            Color accent = attacker != null
+                ? ShrinePalette.ElementBright(attacker.Data.Element)
+                : ShrinePalette.BloodEmber;
+            if (attacker != null && _views.TryGetValue(attacker.Uid, out CardView view))
             {
                 RectTransform parent = (RectTransform)view.Rect.parent;
                 Vector2 targetLocal = parent.InverseTransformPoint(plate.Rect.position);
-                view.PlayAttack(targetLocal, () => HeroImpact(plate, damage));
+                view.PlayAttack(targetLocal, () => HeroImpact(plate, damage, accent));
             }
             else
             {
-                HeroImpact(plate, damage);
+                HeroImpact(plate, damage, accent);
             }
         }
 
-        private void HeroImpact(HeroPlate plate, int damage)
+        private void HeroImpact(HeroPlate plate, int damage, Color? accent = null)
         {
+            Color color = accent ?? ShrinePalette.BloodEmber;
             plate.PlayHit();
             Vector2 position = ToCanvas(plate.Rect);
-            App.Vfx.Impact(transform, position, damage, damage >= 5, ShrinePalette.BloodEmber);
-            App.Vfx.ScreenFlash(ShrinePalette.BloodEmber, 0.24f, 0.40f);
+            App.Vfx.Trail(transform, position + new Vector2(0f, -120f), position, color);
+            App.Vfx.Impact(transform, position, damage, damage >= 5, color);
+            App.Vfx.ScreenFlash(color, 0.24f, 0.40f);
             UiAudioBus.PlayWound();
         }
 
@@ -696,15 +774,16 @@ namespace Shrine.UI
         private void OnCardHovered(CardView view)
         {
             CardData data = view.Card.Data;
-            string rule = data.Element switch
-            {
-                ElementKind.Fire => "Fire: +1 damage in Emberfall; double vs Air.",
-                ElementKind.Water => "Water: restores 2 defence on its first strike.",
-                ElementKind.Earth => "Earth: ignores the first damage it would take.",
-                _ => "Air: ignores the first mana cost of its kind."
-            };
+            ElementKind beats = ElementRules.Beats(data.Element);
+            ElementKind weak = ElementRules.WeaknessOf(data.Element);
             App.Tooltip.Show($"<b>{data.DisplayName}</b>\n{data.Lore}\n\n"
-                + $"<color=#D9B36C>ATK {data.Attack}  DEF {view.Card.CurrentDefense}/{view.Card.MaxDefense}  COST {data.ManaCost}</color>\n{rule}",
+                + $"<color=#{ShrinePalette.Rgb(ShrinePalette.Element(data.Element))}><b>"
+                + $"{data.Element.ToString().ToUpperInvariant()}</b></color>"
+                + $"  <color=#D9B36C>ATK {data.Attack}  DEF {view.Card.CurrentDefense}/{view.Card.MaxDefense}"
+                + $"  COST {data.ManaCost}</color>\n"
+                + $"<color=#{ShrinePalette.Rgb(ShrinePalette.Element(beats))}>x2 vs {beats}</color>"
+                + $"   <color=#C4523C>weak to {weak}</color>\n"
+                + ElementRules.Description(data.Element),
                 Input.mousePosition);
         }
 
@@ -743,6 +822,89 @@ namespace Shrine.UI
             _arrowImage.color = valid
                 ? ShrinePalette.WithAlpha(ShrinePalette.Candlelight, 0.95f)
                 : ShrinePalette.WithAlpha(ShrinePalette.BloodEmber, 0.55f);
+
+            UpdateForecast(view, screenPosition);
+        }
+
+        /// <summary>Shows the exact trade the release would cause, or hides the panel.</summary>
+        private void UpdateForecast(CardView attacker, Vector2 screenPosition)
+        {
+            if (_forecast == null || _model.Player.Hand.Contains(attacker.Card))
+            {
+                HideForecast();
+                return;
+            }
+
+            foreach (KeyValuePair<int, CardView> pair in _views)
+            {
+                CardView target = pair.Value;
+                if (target == attacker || !_model.Opponent.Field.Contains(target.Card)) continue;
+                if (!RectTransformUtility.RectangleContainsScreenPoint(target.Rect, screenPosition)) continue;
+                PresentCardForecast(attacker.Card, target.Card);
+                return;
+            }
+
+            if (_model.Opponent.Field.Count == 0 &&
+                RectTransformUtility.RectangleContainsScreenPoint(_rivalPlate.Rect, screenPosition))
+            {
+                PresentHeroForecast(attacker.Card);
+                return;
+            }
+
+            HideForecast();
+        }
+
+        private void PresentCardForecast(CardInstance attacker, CardInstance target)
+        {
+            int damage = _model.EffectiveAttack(attacker, target, Side.Player);
+            int retaliation = _model.RetaliationDamage(attacker, target);
+            bool kill = damage >= target.CurrentDefense;
+            bool dies = retaliation >= attacker.CurrentDefense;
+            bool edge = ElementRules.HasAdvantage(attacker.Data.Element, target.Data.Element);
+            bool weak = ElementRules.HasAdvantage(target.Data.Element, attacker.Data.Element);
+
+            _forecastTitle.text = $"{attacker.Data.DisplayName.ToUpperInvariant()}  >  "
+                + target.Data.DisplayName.ToUpperInvariant();
+            _forecastTitle.color = ShrinePalette.ElementBright(attacker.Data.Element);
+
+            string body = $"<size=24><b>{damage}</b></size> <color=#B9C2D6>damage</color>"
+                + (kill ? "   <color=#D9B36C><b>KILL</b></color>" : string.Empty)
+                + $"\n<color=#B9C2D6>reply</color> <b>{retaliation}</b>"
+                + (dies
+                    ? "   <color=#C4523C><b>CARD DIES</b></color>"
+                    : "   <color=#719B7A>card survives</color>");
+            if (edge)
+                body += $"\n<color=#{ShrinePalette.Rgb(ShrinePalette.Element(attacker.Data.Element))}>"
+                    + $"{attacker.Data.Element} > {target.Data.Element}: DOUBLE DAMAGE</color>";
+            else if (weak)
+                body += $"\n<color=#{ShrinePalette.Rgb(ShrinePalette.BloodEmber)}>"
+                    + $"their element answers x2</color>";
+            _forecastBody.text = body;
+            RevealForecast();
+        }
+
+        private void PresentHeroForecast(CardInstance attacker)
+        {
+            int damage = _model.HeroDamage(attacker);
+            _forecastTitle.text = "STRIKE THE RIVAL SHRINE";
+            _forecastTitle.color = ShrinePalette.ElementBright(attacker.Data.Element);
+            _forecastBody.text = $"<size=24><b>{damage}</b></size> <color=#B9C2D6>damage to the shrine</color>"
+                + "\n<color=#719B7A>no retaliation</color>";
+            RevealForecast();
+        }
+
+        private void RevealForecast()
+        {
+            _forecast.SetAsLastSibling();
+            _forecastGroup.DOKill();
+            _forecastGroup.DOFade(1f, 0.10f);
+        }
+
+        private void HideForecast()
+        {
+            if (_forecastGroup == null) return;
+            _forecastGroup.DOKill();
+            _forecastGroup.DOFade(0f, 0.12f);
         }
 
         private bool IsValidDrop(CardView view, Vector2 screenPosition)
@@ -820,6 +982,7 @@ namespace Shrine.UI
 
         private void HideTargeting()
         {
+            HideForecast();
             if (_arrow != null) _arrow.gameObject.SetActive(false);
             if (_dragging != null) _dragging = null;
             _altarRect.DOKill();

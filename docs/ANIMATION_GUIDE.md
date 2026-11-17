@@ -70,6 +70,22 @@ UI hover sounds at −18 dB, click at −12 dB; never stack more than 2 at once.
   card never leaves a hole. Hand cards also ride a 5 px-per-slot arc and tilt up
   to 2 degrees outward.
 
+## Elemental combat (Phase 8)
+- **Trail**: a 30 px streak from attacker to target, tilted along the swing. Fade
+  in 0.06 s to 0.85 alpha, out over 0.20 s InQuad, tinted with the attacker's
+  element. Runs before the impact so the eye follows the swing.
+- **Impact**: ring + 0.16 s hit stop, then shake 4-9 px decaying over 0.2 s. The
+  ring is tinted with the attacker's element; the retaliation ring uses the
+  defender's.
+- **Numerals**: 44 px (62 px on a doubled hit), scale 0.45 → 1.15 → 1.0 with
+  0.12 s overshoot, rise 46 px over 0.55 s, fade in the last 0.2 s. Tinted with
+  the striking element.
+- **`ELEMENTAL EDGE` callout**: 0.9 s, rises 26 px, fades after 0.5 s, only when
+  `ElementRules.HasAdvantage` is true for the strike.
+- **Combat forecast**: fades in over 0.10 s while a legal drag target is hovered,
+  out over 0.12 s when the drag ends. Never animates its numbers; only opacity,
+  so the values can be read mid-drag.
+
 ## Reduced motion
 When `Settings.ReducedMotion` is on: no shake, no hit stop, durations ×0.6,
 fades only, no scale overshoot, particle count ×0.35.

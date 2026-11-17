@@ -27,11 +27,16 @@ namespace Shrine.UI
         private Image _costGem;
         private Image _attackGem;
         private Image _healthGem;
+        private Image _ribbon;
+        private Image _ribbonEdge;
+        private Image _ribbonGlyph;
+        private Image _elementMark;
         private TextMeshProUGUI _name;
         private TextMeshProUGUI _cost;
         private TextMeshProUGUI _attack;
         private TextMeshProUGUI _health;
-        private TextMeshProUGUI _element;
+        private TextMeshProUGUI _ribbonName;
+        private TextMeshProUGUI _advantage;
 
         private CardInstance _card;
         private Vector2 _homePosition;
@@ -79,8 +84,8 @@ namespace Shrine.UI
             _frame.raycastTarget = true;
 
             float artWidth = w * 0.88f;
-            float artHeight = h * 0.44f;
-            float artY = h * 0.065f;
+            float artHeight = h * 0.36f;
+            float artY = h * 0.14f;
             _sigilGlow = AddImage(rect, "SigilGlow", ProceduralArt.RadialGlow(ShrinePalette.EmberGold),
                 ShrinePalette.WithAlpha(ShrinePalette.EmberGold, 0.32f),
                 new Vector2(artWidth * 0.95f, artHeight * 1.10f), new Vector2(0f, artY));
@@ -91,25 +96,43 @@ namespace Shrine.UI
                 new Vector2(artWidth - 6f, artHeight - 6f), new Vector2(0f, artY));
             _art.preserveAspect = true;
 
+            // Element watermark over the art: the hue and the glyph repeat the ribbon's
+            // message so a glance across the hand is enough to read the four elements.
+            _elementMark = AddImage(rect, "ElementMark", ProceduralArt.ElementSigil(ElementKind.Fire),
+                ShrinePalette.WithAlpha(ShrinePalette.PaleGale, 0.30f),
+                Vector2.one * (artWidth * 0.42f), new Vector2(w * 0.26f, artY + artHeight * 0.20f));
+
             Image artShade = AddImage(rect, "ArtShade", ProceduralArt.Vignette(),
                 ShrinePalette.WithAlpha(Color.white, 0.42f),
                 new Vector2(artWidth, artHeight), new Vector2(0f, artY));
             artShade.raycastTarget = false;
 
             AddImage(rect, "NamePlate", null,
-                ShrinePalette.WithAlpha(ShrinePalette.MidnightInk, 0.72f),
-                new Vector2(w * 0.92f, h * 0.082f), new Vector2(0f, h * 0.379f));
+                ShrinePalette.WithAlpha(ShrinePalette.MidnightInk, 0.80f),
+                new Vector2(w * 0.92f, h * 0.092f), new Vector2(0f, h * 0.40f));
 
-            _name = AddText(rect, "Name", string.Empty, 0.086f * w, ShrinePalette.Candlelight,
-                new Vector2(w * 0.60f, h * 0.078f), new Vector2(w * 0.09f, h * 0.377f),
+            _name = AddText(rect, "Name", string.Empty, 0.092f * w, ShrinePalette.Candlelight,
+                new Vector2(w * 0.62f, h * 0.086f), new Vector2(w * 0.06f, h * 0.40f),
                 TextAlignmentOptions.Center, true);
-            _name.characterSpacing = 3f;
+            _name.characterSpacing = 2f;
 
-            _element = AddText(rect, "Element", string.Empty, Mathf.Max(9f, 0.058f * w),
-                ShrinePalette.BoneParchment,
-                new Vector2(w * 0.62f, h * 0.048f), new Vector2(w * 0.075f, h * 0.308f),
-                TextAlignmentOptions.Center, false);
-            _element.characterSpacing = 10f;
+            // Element ribbon: colour, glyph and the element it defeats, all in one band.
+            _ribbon = AddImage(rect, "ElementRibbon", null, ShrinePalette.EmberOrange,
+                new Vector2(w * 0.94f, h * 0.105f), new Vector2(0f, -h * 0.062f));
+            _ribbonEdge = AddImage(rect, "RibbonEdge", null,
+                ShrinePalette.WithAlpha(ShrinePalette.MidnightInk, 0.7f),
+                new Vector2(w * 0.94f, 1.5f), new Vector2(0f, -h * 0.115f));
+            _ribbonGlyph = AddImage(rect, "RibbonGlyph", ProceduralArt.ElementSigil(ElementKind.Fire),
+                Color.white, Vector2.one * (w * 0.135f), new Vector2(-w * 0.395f, -h * 0.062f));
+            _ribbonName = AddText(rect, "RibbonName", string.Empty, 0.065f * w, ShrinePalette.MidnightInk,
+                new Vector2(w * 0.42f, h * 0.08f), new Vector2(-w * 0.10f, -h * 0.062f),
+                TextAlignmentOptions.Left, true);
+            _ribbonName.characterSpacing = 6f;
+            _advantage = AddText(rect, "Advantage", string.Empty, 10.5f,
+                ShrinePalette.MidnightInk,
+                new Vector2(w * 0.30f, h * 0.08f), new Vector2(w * 0.285f, -h * 0.062f),
+                TextAlignmentOptions.Right, false);
+            _advantage.enableAutoSizing = false;
 
             AddText(rect, "AttackLabel", "ATK", 10f, ShrinePalette.WithAlpha(ShrinePalette.MoonSilver, 0.9f),
                 new Vector2(w * 0.3f, 11f), new Vector2(-w * 0.315f, -h * 0.202f),
@@ -156,8 +179,15 @@ namespace Shrine.UI
             _ready = ready;
             CardData data = _card.Data;
             _name.text = data.DisplayName;
-            _element.text = data.Element.ToString().ToUpperInvariant();
-            _element.color = Color.Lerp(ShrinePalette.Element(data.Element), ShrinePalette.BoneParchment, 0.55f);
+            _ribbon.color = ShrinePalette.WithAlpha(ShrinePalette.Element(data.Element), 0.94f);
+            _ribbonGlyph.sprite = ProceduralArt.ElementSigil(data.Element);
+            _ribbonGlyph.color = ShrinePalette.ElementInk(data.Element);
+            _ribbonName.text = data.Element.ToString().ToUpperInvariant();
+            _ribbonName.color = ShrinePalette.ElementInk(data.Element);
+            _advantage.text = "> " + ElementRules.Beats(data.Element).ToString().ToUpperInvariant();
+            _advantage.color = ShrinePalette.WithAlpha(ShrinePalette.ElementInk(data.Element), 0.82f);
+            _elementMark.sprite = ProceduralArt.ElementSigil(data.Element);
+            _elementMark.color = ShrinePalette.WithAlpha(ShrinePalette.ElementBright(data.Element), 0.38f);
             _cost.text = data.ManaCost.ToString();
             _cost.color = affordable ? ShrinePalette.Candlelight
                 : ShrinePalette.WithAlpha(ShrinePalette.MoonSilver, 0.7f);
@@ -268,13 +298,14 @@ namespace Shrine.UI
             });
         }
 
-        public void PlayHit()
+        public void PlayHit(Color? tint = null)
         {
             Rect.DOKill();
             Rect.localScale = _homeScale * new Vector3(1.10f, 0.90f);
             Rect.DOScale(Vector3.one * _homeScale, 0.26f).SetEase(Ease.OutBack, 1.5f);
             _flash.DOKill();
-            _flash.color = ShrinePalette.WithAlpha(ShrinePalette.Candlelight, 0.75f);
+            Color glow = tint ?? ShrinePalette.Candlelight;
+            _flash.color = ShrinePalette.WithAlpha(glow, 0.78f);
             _flash.DOFade(0f, 0.22f).SetEase(Ease.OutQuad);
         }
 
@@ -354,6 +385,9 @@ namespace Shrine.UI
             text.enableAutoSizing = true;
             text.fontSizeMin = Mathf.Max(7f, size * 0.62f);
             text.fontSizeMax = size;
+            // Small labels are laid out in rects barely taller than the glyphs; without
+            // this the ascenders of the element tag and the stat labels are clipped.
+            text.overflowMode = TextOverflowModes.Overflow;
             return text;
         }
 

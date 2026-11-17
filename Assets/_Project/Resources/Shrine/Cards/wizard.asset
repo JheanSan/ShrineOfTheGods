@@ -18,6 +18,6 @@ MonoBehaviour:
     Element: 1
     Attack: 2
     Defense: 4
-    ManaCost: 6
+    ManaCost: 4
     Lore: A wizard whose beard holds the names of seven forgotten seas.
     ArtResourcePath: 

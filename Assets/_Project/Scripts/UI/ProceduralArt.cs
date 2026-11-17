@@ -33,7 +33,7 @@ namespace Shrine.UI
                 wrapMode = TextureWrapMode.Clamp
             };
             Color accent = element.HasValue
-                ? Color.Lerp(ShrinePalette.Element(element.Value), ShrinePalette.EmberGold, 0.35f)
+                ? Color.Lerp(ShrinePalette.Element(element.Value), ShrinePalette.EmberGold, 0.28f)
                 : ShrinePalette.EmberGold;
             for (int y = 0; y < height; y++)
             {
@@ -313,6 +313,32 @@ namespace Shrine.UI
             return Finish(texture, key);
         }
 
+        /// <summary>Tapered lens of light stretched between attacker and target.</summary>
+        public static Sprite Streak()
+        {
+            const string key = "streak";
+            if (Cache.TryGetValue(key, out Sprite cached)) return cached;
+            const int width = 256;
+            const int height = 32;
+            var canvas = new SpriteCanvas(width, height);
+            for (int x = 0; x < width; x++)
+            {
+                float t = x / (float)(width - 1);
+                float half = 13f * Mathf.Pow(Mathf.Sin(t * Mathf.PI), 0.75f);
+                for (int y = 0; y < height; y++)
+                {
+                    float distance = Mathf.Abs(y - (height - 1) * 0.5f);
+                    float a = Mathf.Clamp01(half - distance + 0.6f);
+                    if (a <= 0f) continue;
+                    float core = Mathf.Clamp01(1f - distance / Mathf.Max(1f, half));
+                    canvas.Blend(x, y, Color.white, a * (0.35f + core * 0.65f));
+                }
+            }
+            Sprite sprite = canvas.ToSprite(key);
+            Cache[key] = sprite;
+            return sprite;
+        }
+
         /// <summary>Targeting arrow stretched from the dragged card to the cursor.</summary>
         public static Sprite Arrow()
         {
@@ -463,322 +489,28 @@ namespace Shrine.UI
             return Finish(texture, key);
         }
 
+        /// <summary>Element glyph, white on transparent so the UI can tint it. Cached per element.</summary>
         public static Sprite ElementSigil(ElementKind element)
         {
             string key = "sigil_" + element;
             if (Cache.TryGetValue(key, out Sprite cached)) return cached;
-            var texture = NewTexture(128, key);
-            Color gold = ShrinePalette.EmberGold;
-            Color accent = ShrinePalette.Element(element);
-            DrawCircle(texture, 64, 64, 54, 2.5f, gold);
-            DrawCircle(texture, 64, 64, 43, 1f, ShrinePalette.WithAlpha(gold, 0.55f));
-            switch (element)
-            {
-                case ElementKind.Fire:
-                    DrawLine(texture, 64, 96, 44, 44, 4, accent);
-                    DrawLine(texture, 64, 96, 84, 44, 4, accent);
-                    DrawLine(texture, 64, 96, 64, 34, 4, gold);
-                    break;
-                case ElementKind.Water:
-                    DrawArc(texture, 64, 78, 24, 200f, 340f, 4, accent);
-                    DrawArc(texture, 64, 62, 24, 200f, 340f, 4, gold);
-                    DrawArc(texture, 64, 46, 24, 200f, 340f, 4, accent);
-                    break;
-                case ElementKind.Earth:
-                    DrawLine(texture, 30, 42, 64, 88, 4, accent);
-                    DrawLine(texture, 64, 88, 98, 42, 4, gold);
-                    DrawLine(texture, 40, 42, 88, 42, 4, accent);
-                    break;
-                case ElementKind.Air:
-                    DrawArc(texture, 64, 64, 12, 0f, 290f, 3.5f, accent);
-                    DrawArc(texture, 64, 64, 26, 60f, 350f, 3.5f, gold);
-                    DrawLine(texture, 64, 64, 100, 52, 3, accent);
-                    break;
-            }
-            return Finish(texture, key);
+            Sprite sprite = ProceduralSigils.Render(element);
+            Cache[key] = sprite;
+            return sprite;
         }
 
         /// <summary>
-        /// Per-card emblem: the elemental glyph inside a seeded ring of spokes and marks,
-        /// so every card reads as its own relic instead of a repeated placeholder rune.
-        /// </summary>
-        public static Sprite CardEmblem(ElementKind element, string id)
-        {
-            string key = "emblem_" + element + "_" + id;
-            if (Cache.TryGetValue(key, out Sprite cached)) return cached;
-            var texture = NewTexture(160, key);
-            Color gold = ShrinePalette.EmberGold;
-            Color accent = ShrinePalette.Element(element);
-            Color dim = ShrinePalette.WithAlpha(gold, 0.38f);
-            int seed = StableHash(id);
-            int spokes = 5 + seed % 7;
-            float phase = (seed % 360) * Mathf.Deg2Rad;
-
-            DrawCircle(texture, 80, 80, 70, 2.4f, gold);
-            DrawCircle(texture, 80, 80, 58, 1.2f, dim);
-            DrawCircle(texture, 80, 80, 30, 1.4f, ShrinePalette.WithAlpha(accent, 0.7f));
-            for (int i = 0; i < spokes; i++)
-            {
-                float angle = phase + i * Mathf.PI * 2f / spokes;
-                bool longSpoke = (seed >> (i % 16) & 1) == 1;
-                float inner = 60f;
-                float outer = longSpoke ? 68f : 65f;
-                DrawLine(texture,
-                    80 + Mathf.RoundToInt(Mathf.Cos(angle) * inner),
-                    80 + Mathf.RoundToInt(Mathf.Sin(angle) * inner),
-                    80 + Mathf.RoundToInt(Mathf.Cos(angle) * outer),
-                    80 + Mathf.RoundToInt(Mathf.Sin(angle) * outer),
-                    longSpoke ? 3f : 2f, longSpoke ? accent : dim);
-            }
-            for (int i = 0; i < 4; i++)
-            {
-                float angle = phase * 0.5f + i * Mathf.PI * 0.5f;
-                DrawDisc(texture, 80 + Mathf.RoundToInt(Mathf.Cos(angle) * 74f),
-                    80 + Mathf.RoundToInt(Mathf.Sin(angle) * 74f), 2.6f, gold);
-            }
-
-            switch (element)
-            {
-                case ElementKind.Fire:
-                    DrawLine(texture, 80, 106, 62, 62, 4, accent);
-                    DrawLine(texture, 80, 106, 98, 62, 4, accent);
-                    DrawLine(texture, 80, 106, 80, 50, 4, gold);
-                    break;
-                case ElementKind.Water:
-                    DrawArc(texture, 80, 90, 24, 200f, 340f, 4, accent);
-                    DrawArc(texture, 80, 76, 24, 200f, 340f, 4, gold);
-                    DrawArc(texture, 80, 62, 24, 200f, 340f, 4, accent);
-                    break;
-                case ElementKind.Earth:
-                    DrawLine(texture, 52, 58, 80, 98, 4, accent);
-                    DrawLine(texture, 80, 98, 108, 58, 4, gold);
-                    DrawLine(texture, 60, 58, 100, 58, 4, accent);
-                    break;
-                default:
-                    DrawArc(texture, 80, 80, 13, 0f, 290f, 3.5f, accent);
-                    DrawArc(texture, 80, 80, 27, 60f, 350f, 3.5f, gold);
-                    DrawLine(texture, 80, 80, 112, 70, 3, accent);
-                    break;
-            }
-            return Finish(texture, key);
-        }
-
-        /// <summary>
-        /// Painted plate for a card: a seeded shrine landscape in the card's element tint.
-        /// Each card gets its own moon, ridgeline and ruin silhouette, so the art well reads
-        /// as an illustration rather than a repeated rune.
+        /// Painted plate for a card: a seeded landscape and creature silhouette in the
+        /// card element own palette. See <see cref="ProceduralCardScenes"/> for the art.
         /// </summary>
         public static Sprite CardScene(ElementKind element, string id)
         {
             string key = "scene_" + element + "_" + id;
             if (Cache.TryGetValue(key, out Sprite cached)) return cached;
-            // Sized to the card art well (about 145x95 on screen) so sampling stays
-            // close to 1:1 and drawn edges stay crisp instead of aliasing into dashes.
-            const int width = 192;
-            const int height = 144;
-            const float artScale = width / 384f;
-            var texture = new Texture2D(width, height, TextureFormat.RGBA32, false)
-            {
-                name = "Procedural_" + key,
-                filterMode = FilterMode.Bilinear,
-                wrapMode = TextureWrapMode.Clamp
-            };
-            var pixels = new Color[width * height];
-            int seed = StableHash(id);
-            float phase = (seed % 628) * 0.01f;
-            Color tint = ShrinePalette.Element(element);
-            Color skyLow = Color.Lerp(ShrinePalette.TwilightIndigo, tint, 0.42f);
-            Color skyHigh = Color.Lerp(ShrinePalette.MidnightInk, ShrinePalette.TwilightIndigo, 0.34f);
-            float moonX = width * (0.26f + (seed >> 3) % 100 * 0.0048f);
-            float moonY = height * (0.64f + (seed >> 7) % 100 * 0.0014f);
-            float moonR = (20f + (seed >> 11) % 18) * artScale;
-            Color moonColor = Color.Lerp(ShrinePalette.BoneParchment, tint, 0.38f);
-
-            const int layers = 4;
-            var ridge = new float[layers, width];
-            var ridgeColor = new Color[layers];
-            for (int k = 0; k < layers; k++)
-            {
-                float baseFraction = 0.44f - k * 0.086f;
-                float amplitude = (0.080f - k * 0.013f) * height;
-                ridgeColor[k] = Color.Lerp(
-                    Color.Lerp(ShrinePalette.TwilightIndigo, ShrinePalette.MidnightInk, 0.22f + k * 0.24f),
-                    tint, 0.13f);
-                for (int x = 0; x < width; x++)
-                {
-                    float u = x / (float)(width - 1);
-                    float n = Mathf.Sin(u * Mathf.PI * (2.3f + k * 0.8f) + phase + k)
-                        + Mathf.Sin(u * Mathf.PI * (5.7f + k) + phase * 1.7f) * 0.45f
-                        + Mathf.Sin(u * Mathf.PI * (11.3f + k * 2f) + phase * 0.6f) * 0.18f;
-                    ridge[k, x] = baseFraction * height + n * amplitude * 0.5f;
-                }
-            }
-
-            // Ruin: two broken pillars with a lintel, set between the far ridges.
-            float ruinX = width * (0.5f + Mathf.Sin(phase) * 0.24f);
-            float ruinBase = height * (0.30f + (seed >> 5) % 40 * 0.002f);
-            float pillarWidth = (7f + (seed >> 9) % 5) * artScale;
-            float pillarHeight = (32f + (seed >> 13) % 26) * artScale;
-            float gap = pillarWidth * 4.8f;
-
-            for (int y = 0; y < height; y++)
-            {
-                float t = y / (float)(height - 1);
-                for (int x = 0; x < width; x++)
-                {
-                    Color c = Color.Lerp(skyLow, skyHigh, Mathf.Pow(t, 0.72f));
-                    c = Color.Lerp(c, tint, Mathf.Clamp01(1f - Mathf.Abs(t - 0.40f) * 3.2f) * 0.22f);
-
-                    float dx = x - moonX;
-                    float dy = y - moonY;
-                    float d = Mathf.Sqrt(dx * dx + dy * dy);
-                    if (d < moonR * 3.6f)
-                        c = Color.Lerp(c, moonColor, Mathf.Pow(1f - d / (moonR * 3.6f), 2.4f) * 0.34f);
-                    if (d < moonR)
-                    {
-                        c = Color.Lerp(c, moonColor, Mathf.Clamp01((moonR - d) / 2f) * 0.85f);
-                        if (Mathf.Sin(dx * 0.21f + dy * 0.17f) * Mathf.Sin(dx * 0.09f - dy * 0.26f) > 0.4f)
-                            c = Color.Lerp(c, ShrinePalette.ShrineShadow, 0.16f);
-                    }
-
-                    if (y > height * 0.62f && y > ridge[0, x] + 6f
-                        && Hash(x + seed % 97, y) > 0.9985f)
-                        c = Color.Lerp(c, ShrinePalette.MoonSilver,
-                            0.22f + Hash(y, x) * 0.30f);
-
-                    if (y < ruinBase + pillarHeight && y > ruinBase - 5f)
-                    {
-                        float left = ruinX - gap * 0.5f;
-                        float right = ruinX + gap * 0.5f;
-                        bool pillar = x > left && x < left + pillarWidth
-                            || x > right - pillarWidth && x < right;
-                        float lintelY = ruinBase + pillarHeight;
-                        bool lintel = y > lintelY - 6f && y < lintelY
-                            && Mathf.Abs(x - ruinX) < gap * 0.30f;
-                        if (pillar || lintel) c = Color.Lerp(c, ShrinePalette.MidnightInk, 0.70f);
-                    }
-
-                    for (int k = layers - 1; k >= 0; k--)
-                    {
-                        if (y > ridge[k, x]) continue;
-                        c = Color.Lerp(c, ridgeColor[k], 0.94f);
-                        break;
-                    }
-
-                    // Ground below the nearest ridge, so the valley floor is not a flat void.
-                    float frontY = ridge[layers - 1, x];
-                    if (y < frontY)
-                    {
-                        float depth = Mathf.Clamp01((frontY - y) / (height * 0.30f));
-                        Color ground = Color.Lerp(
-                            Color.Lerp(ShrinePalette.ShrineShadow, ridgeColor[layers - 1], 0.40f),
-                            ShrinePalette.MidnightInk, depth * 0.55f);
-                        c = Color.Lerp(c, ground, 0.92f);
-                        float sheen = Mathf.Clamp01(1f - Mathf.Abs(x - moonX) / (width * 0.42f));
-                        c = Color.Lerp(c, moonColor, sheen * 0.09f * (1f - depth));
-                    }
-
-                    pixels[y * width + x] = c;
-                }
-            }
-
-            // Rim light drawn as a joined line per ridge, so steep slopes stay continuous.
-            for (int k = 0; k < layers; k++)
-            {
-                Color rim = Color.Lerp(ridgeColor[k],
-                    Color.Lerp(tint, ShrinePalette.MoonSilver, 0.45f), 0.42f);
-                for (int x = 0; x < width - 1; x++)
-                {
-                    float y0 = ridge[k, x];
-                    float y1 = ridge[k, x + 1];
-                    int yLow = Mathf.Max(0, Mathf.RoundToInt(Mathf.Min(y0, y1)) - 1);
-                    int yHigh = Mathf.Min(height - 1, Mathf.RoundToInt(Mathf.Max(y0, y1)));
-                    for (int y = yLow; y <= yHigh; y++)
-                    {
-                        for (int d = 0; d <= 1; d++)
-                        {
-                            int yy = y - d;
-                            if (yy < 0) continue;
-                            int i = yy * width + x;
-                            float a = d == 0 ? 0.55f : 0.22f;
-                            pixels[i] = Color.Lerp(pixels[i], rim, a);
-                        }
-                    }
-                }
-            }
-
-            // Foreground: a broken colonnade framing the scene, darker than every ridge.
-            int columns = 2 + (seed >> 15) % 2;
-            for (int i = 0; i < columns; i++)
-            {
-                float fraction = i == 0 ? 0.06f : i == columns - 1 ? 0.94f : 0.5f;
-                float cx = width * fraction;
-                float cw = (9f + (seed >> (i + 3)) % 7) * artScale;
-                float ch = height * (0.30f + (seed >> (i + 6)) % 18 * 0.014f);
-                int x0 = Mathf.RoundToInt(cx - cw * 0.5f);
-                int x1 = Mathf.RoundToInt(cx + cw * 0.5f);
-                int top = Mathf.RoundToInt(ch);
-                for (int y = 0; y <= top; y++)
-                {
-                    float fade = Mathf.Lerp(0.92f, 0.55f, y / Mathf.Max(1f, top));
-                    for (int x = x0; x <= x1; x++)
-                    {
-                        if (x < 0 || x >= width) continue;
-                        int i2 = y * width + x;
-                        Color stone = Color.Lerp(ShrinePalette.MidnightInk, tint, 0.05f);
-                        pixels[i2] = Color.Lerp(pixels[i2], stone, fade);
-                        if (x == x0)
-                            pixels[i2] = Color.Lerp(pixels[i2], tint, 0.16f * (1f - y / Mathf.Max(1f, top)));
-                    }
-                }
-                for (int x = x0 - 3; x <= x1 + 3; x++)
-                {
-                    if (x < 0 || x >= width) continue;
-                    for (int y = top - 4; y <= top + 1; y++)
-                    {
-                        if (y < 0 || y >= height) continue;
-                        int i2 = y * width + x;
-                        pixels[i2] = Color.Lerp(pixels[i2], ShrinePalette.MidnightInk, 0.85f);
-                    }
-                }
-            }
-
-            for (int y = 0; y < height; y++)
-            {
-                float t = y / (float)(height - 1);
-                float fog = Mathf.Clamp01(1f - Mathf.Abs(t - 0.29f) * 6f) * 0.13f;
-                for (int x = 0; x < width; x++)
-                {
-                    float fx = Mathf.Abs(x - (width - 1) * 0.5f) / (width * 0.5f);
-                    float fy = Mathf.Abs(y - (height - 1) * 0.5f) / (height * 0.5f);
-                    float edge = Mathf.SmoothStep(0f, 0.55f,
-                        Mathf.Clamp01(Mathf.Max(fx, fy) - 0.36f));
-                    int i = y * width + x;
-                    if (fog > 0f) pixels[i] = Color.Lerp(pixels[i], tint, fog);
-                    if (edge > 0f)
-                        pixels[i] = Color.Lerp(pixels[i], ShrinePalette.MidnightInk, edge);
-                }
-            }
-
-            texture.SetPixels(pixels);
-            texture.Apply(false, false);
-            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, width, height),
-                new Vector2(0.5f, 0.5f), 100f);
-            sprite.name = "Procedural_" + key;
+            Sprite sprite = ProceduralCardScenes.Render(element, id);
             Cache[key] = sprite;
             return sprite;
         }
-
-        private static int StableHash(string value)
-        {
-            unchecked
-            {
-                int hash = 17;
-                foreach (char c in value) hash = hash * 31 + c;
-                return hash & 0x7fffffff;
-            }
-        }
-
         public static Sprite Altar()
         {
             const string key = "altar";

@@ -18,6 +18,6 @@ MonoBehaviour:
     Element: 3
     Attack: 4
     Defense: 3
-    ManaCost: 5
+    ManaCost: 4
     Lore: A gryphon that circles the ruins, hunting what the gods abandoned.
     ArtResourcePath: 
