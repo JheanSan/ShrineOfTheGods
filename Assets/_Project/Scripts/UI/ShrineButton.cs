@@ -21,6 +21,8 @@ namespace Shrine.UI
         private Vector3 _baseScale = Vector3.one;
         private bool _hovered;
         private bool _selected;
+        private bool _attentionOn;
+        private Tween _attention;
 
         public void Initialize(Button button, Image image, TextMeshProUGUI label, bool primary)
         {
@@ -78,6 +80,33 @@ namespace Shrine.UI
             _button.interactable = value;
             _image.color = value ? _baseColor : ShrinePalette.WithAlpha(ShrinePalette.MoonSilver, 0.35f);
             _label.color = value ? _baseText : ShrinePalette.WithAlpha(ShrinePalette.MoonSilver, 0.5f);
+            if (!value) SetAttention(false);
+        }
+
+        /// <summary>Soft loop used when the button is the obvious next action.</summary>
+        public void SetAttention(bool attention)
+        {
+            if (attention == _attentionOn) return;
+            _attentionOn = attention;
+            _attention?.Kill();
+            _attention = null;
+            transform.DOKill();
+            _image.DOKill();
+            if (!attention)
+            {
+                transform.localScale = _baseScale;
+                if (!_hovered && !_selected) _image.color = _baseColor;
+                return;
+            }
+            if (!_button.interactable) return;
+            _image.DOColor(ShrinePalette.Candlelight, 0.22f);
+            _attention = transform.DOScale(_baseScale * 1.035f, 0.62f)
+                .SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo);
+        }
+
+        public void SetLabel(string text)
+        {
+            if (_label != null) _label.text = text;
         }
 
         private void Animate(float scale, Color color, float duration)
@@ -95,6 +124,9 @@ namespace Shrine.UI
             transform.DOKill();
             _image?.DOKill();
             _label?.DOKill();
+            _attention?.Kill();
+            _attention = null;
+            _attentionOn = false;
         }
     }
 }

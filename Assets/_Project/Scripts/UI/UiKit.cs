@@ -1,6 +1,6 @@
 using Shrine.Audio;
 using Shrine.Core;
-using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -102,6 +102,9 @@ namespace Shrine.UI
             TextMeshProUGUI text = Text(rect, "Label", label, primary ? 30 : 24,
                 primary ? ShrinePalette.Candlelight : ShrinePalette.BoneParchment, true);
             text.margin = new Vector4(12, 4, 12, 4);
+            text.enableAutoSizing = true;
+            text.fontSizeMin = primary ? 16 : 14;
+            text.fontSizeMax = primary ? 30 : 24;
 
             var shrineButton = rect.gameObject.AddComponent<ShrineButton>();
             shrineButton.Initialize(button, image, text, primary);
@@ -126,11 +129,17 @@ namespace Shrine.UI
             return outer;
         }
 
+        private static readonly Dictionary<string, Sprite> SpriteCache = new Dictionary<string, Sprite>();
+
+        /// <summary>Resources lookup, cached: the battle re-binds plates and cards on every event.</summary>
         public static Sprite LoadSprite(string path)
         {
+            if (string.IsNullOrEmpty(path)) return null;
+            if (SpriteCache.TryGetValue(path, out Sprite cached)) return cached;
             Sprite sprite = Resources.Load<Sprite>(path);
             if (sprite == null)
                 Debug.LogWarning($"Shrine sprite missing: Resources/{path}");
+            SpriteCache[path] = sprite;
             return sprite;
         }
     }
