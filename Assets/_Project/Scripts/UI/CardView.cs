@@ -148,6 +148,7 @@ namespace Shrine.UI
 
         public void OnPointerExit(PointerEventData eventData)
         {
+            TooltipOverlay.Active?.Hide();
             if (_dragging) return;
             Rect.DOScale(Vector3.one, 0.22f).SetEase(Ease.OutCubic);
             Rect.DOLocalRotate(Vector3.zero, 0.22f).SetEase(Ease.OutCubic);

@@ -9,6 +9,8 @@ namespace Shrine.UI
     /// <summary>Delayed, screen-clamped tooltip with rich text rules.</summary>
     public sealed class TooltipOverlay : ShrineScreen
     {
+        public static TooltipOverlay Active { get; private set; }
+
         private RectTransform _panel;
         private TextMeshProUGUI _text;
         private Coroutine _hide;
@@ -25,7 +27,13 @@ namespace Shrine.UI
             _text.margin = new Vector4(18, 12, 18, 12);
             Group.alpha = 1f;
             gameObject.SetActive(true);
+            Active = this;
             Hide();
+        }
+
+        private void OnDestroy()
+        {
+            if (Active == this) Active = null;
         }
 
         public void Show(string message, Vector2 screenPosition)

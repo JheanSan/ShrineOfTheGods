@@ -216,17 +216,17 @@ namespace Shrine.Gameplay
                 int retaliation = target.Data.Attack;
                 if (target.Data.Element == ElementKind.Fire && card.Data.Element == ElementKind.Air)
                     retaliation *= 2;
+                if (card.Data.Element == ElementKind.Earth && !card.HasUsedPower)
+                {
+                    card.MarkPowerUsed();
+                    card.ModifyDefense(2);
+                    retaliation = 0;
+                }
                 bool attackerDied = card.TakeDamage(retaliation);
 
                 if (card.Data.Element == ElementKind.Water && !card.HasUsedPower)
                 {
                     card.MarkPowerUsed();
-                    card.ModifyDefense(2);
-                }
-                if (card.Data.Element == ElementKind.Earth && !card.HasUsedPower)
-                {
-                    card.MarkPowerUsed();
-                    retaliation = 0;
                     card.ModifyDefense(2);
                 }
 
@@ -239,6 +239,12 @@ namespace Shrine.Gameplay
             {
                 int damage = card.Data.Attack + (card.Data.Element == ElementKind.Fire ? _currentOmen.AttackBonus : 0)
                     + _currentOmen.DirectDamageBonus;
+                if (card.Data.Element == ElementKind.Earth && !card.HasUsedPower)
+                {
+                    card.MarkPowerUsed();
+                    card.ModifyDefense(2);
+                    damage = 0;
+                }
                 ApplyHeroDamage(defender, damage);
                 HeroDamaged?.Invoke(card, Other(side), damage);
                 Log?.Invoke($"{card.Data.DisplayName} strikes the shrine for {damage}.");

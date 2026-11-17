@@ -7,7 +7,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Phase 5 — Code quality and tests (in progress)
 #### Added
-- EditMode rule tests (10) and PlayMode boot tests (2); all passing.
+- EditMode rule tests (11) and PlayMode boot tests (2); all passing.
+- Card view pooling, a frame probe and a rewritten README.
 - Assembly definitions for runtime, editor and tests; namespaces and pure model.
 - `.editorconfig` and an improved `.gitignore`.
 

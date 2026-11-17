@@ -16,6 +16,7 @@ namespace Shrine.UI
     public sealed class BattleScreen : ShrineScreen
     {
         private readonly Dictionary<int, CardView> _views = new Dictionary<int, CardView>();
+        private readonly Stack<CardView> _pool = new Stack<CardView>();
         private readonly List<RectTransform> _favourRays = new List<RectTransform>();
         private BattleModel _model;
         private OpponentAI _ai;
@@ -44,6 +45,7 @@ namespace Shrine.UI
 
         public void Bind(BattleModel model, OpponentAI ai)
         {
+            if (_model != model) ResetViews();
             _model = model;
             _ai = ai;
             if (_bound) return;
@@ -235,7 +237,7 @@ namespace Shrine.UI
             Vector2 position = view.Rect.anchoredPosition;
             App.Vfx.Burst(transform, position, ShrinePalette.BloodEmber, 12);
             view.Rect.DOScale(Vector3.zero, 0.24f).SetEase(Ease.InCubic)
-                .OnComplete(() => Destroy(view.gameObject));
+                .OnComplete(() => Recycle(view));
             Layout();
         }
 
@@ -370,15 +372,40 @@ namespace Shrine.UI
         private CardView GetView(CardInstance card, Transform parent)
         {
             if (_views.TryGetValue(card.Uid, out CardView existing)) return existing;
-            var view = new GameObject("Card_" + card.Data.Id).AddComponent<CardView>();
-            view.Initialize(parent, new Vector2(150, 214), false);
-            view.Clicked += OnCardClicked;
-            view.Hovered += OnCardHovered;
-            view.DragEnded += OnCardDragEnded;
-            view.DragAllowed += CanDrag;
+            CardView view;
+            if (_pool.Count > 0)
+            {
+                view = _pool.Pop();
+                view.gameObject.SetActive(true);
+                view.Rect.localScale = Vector3.one;
+                view.Rect.localRotation = Quaternion.identity;
+                view.Rect.DOKill();
+            }
+            else
+            {
+                view = new GameObject("CardView").AddComponent<CardView>();
+                view.Initialize(parent, new Vector2(150, 214), false);
+                view.Clicked += OnCardClicked;
+                view.Hovered += OnCardHovered;
+                view.DragEnded += OnCardDragEnded;
+                view.DragAllowed += CanDrag;
+            }
             view.Bind(card, true, false);
             _views[card.Uid] = view;
             return view;
+        }
+
+        private void Recycle(CardView view)
+        {
+            view.Rect.DOKill();
+            view.gameObject.SetActive(false);
+            _pool.Push(view);
+        }
+
+        private void ResetViews()
+        {
+            foreach (CardView view in _views.Values) Recycle(view);
+            _views.Clear();
         }
 
         private bool CanDrag(CardView view)

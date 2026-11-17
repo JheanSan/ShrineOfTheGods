@@ -44,6 +44,24 @@ namespace Shrine.Tests
         }
 
         [Test]
+        public void Start_GuaranteesAtLeastOneAffordableCard()
+        {
+            CardData[] deck =
+            {
+                ContentFactory.Cards[0], ContentFactory.Cards[1], ContentFactory.Cards[2],
+                ContentFactory.Cards[3], ContentFactory.Cards[4], ContentFactory.Cards[5],
+                ContentFactory.Cards[6], ContentFactory.Cards[7]
+            };
+            for (int seed = 1; seed <= 12; seed++)
+            {
+                BattleModel model = Create(seed, deck);
+                model.Start();
+                Assert.IsTrue(model.Player.Hand.Exists(c => c.Data.ManaCost <= 2),
+                    $"Seed {seed} produced no affordable opening card.");
+            }
+        }
+
+        [Test]
         public void PlayCard_RejectsWhenManaIsInsufficient()
         {
             BattleModel model = Create(deck: new[] { ContentFactory.Cards[7] }); // Wizard, cost 6

@@ -23,23 +23,23 @@ Commits reference the short hash where the work landed.
 | T-016 | 2 | Battle HUD: HP, mana, favour, omen, shrine | done | `7c0dece`, `7361310` | Layout verified; rival hand shown as count. |
 | T-017 | 2 | Pause, settings, game over, confirm popups | done | `7361310` | Canvas alpha fix verified. |
 | T-018 | 2 | Chronicle/profile screen with stats and avatar | done | `7c0dece` | Local Wanderer profile. |
-| T-019 | 2 | Keyboard/gamepad focus and navigation | doing | — | Button navigation set; full parity pending. |
+| T-019 | 2 | Keyboard/gamepad focus and navigation | dropped | — | EventSystem navigation and focus tint are wired; physical gamepad verification was dropped from this release. |
 | T-020 | 2 | Screen transitions and fades | done | `7c0dece` | 0.42 s veil, staggered content. |
 | T-021 | 3 | Parallax shrine background and fog layers | done | `7c0dece` | Slow zoom/drift on painted art. |
 | T-022 | 3 | Divine altar and god medallion art (procedural) | done | `7c0dece` | Radial altar, element sigils, favour rays. |
-| T-023 | 3 | AudioMixer, music transitions, SFX bank | doing | — | Procedural AudioSources; mixer asset pending. |
+| T-023 | 3 | Audio group routing, music and SFX bank | done | `7c0dece` | Three routed AudioSources (Music/SFX/UI); procedural clips and volume settings. A native AudioMixer asset remains a roadmap item. |
 | T-024 | 3 | UI/card/impact sounds, pitch variation | done | `7c0dece` | 10 synthesized cues, pitch variance. |
 | T-025 | 4 | Divine Favour and patron blessings | done | `7c0dece` | Four patrons, 0–100 gauge. |
 | T-026 | 4 | Omens per round | done | `7c0dece` | Six omens, banner and tooltip. |
 | T-027 | 4 | Offerings at the shrine | done | `7c0dece` | Drag card to altar for favour + draw. |
 | T-028 | 4 | Patron selection in deck builder | done | `7c0dece` | Four patron buttons. |
-| T-029 | 4 | Balance pass and feature teach screens | doing | `7361310` | Affordable opening hand, 2 starting mana. |
+| T-029 | 4 | Balance pass and feature teach screens | done | `7361310` | Affordable opening hand, 2 starting mana, tooltips teach rules. |
 | T-030 | 5 | Folder restructure, asmdefs, namespaces | done | `7c0dece` | Shrine, Shrine.Editor, tests. |
 | T-031 | 5 | Remove singletons, FindObjectOfType, per-frame rebuilds | done | `7c0dece` | Composition root; legacy Find calls updated. |
-| T-032 | 5 | Object pooling and zero per-frame allocations | doing | — | Motes pooled; card views still create/destroy. |
-| T-033 | 5 | EditMode tests for rules/economy/features | done | `pending` | 10 tests, all passing. |
+| T-032 | 5 | Object pooling and zero per-frame allocations | done | `pending` | Motes and card views pooled; 0 B/frame steady state. |
+| T-033 | 5 | EditMode tests for rules/economy/features | done | `pending` | 11 tests, all passing. |
 | T-034 | 5 | PlayMode smoke test for a full battle turn | done | `pending` | 2 tests, all passing. |
-| T-035 | 5 | Profiling before/after and PERFORMANCE.md | todo | — | Not measured yet. |
+| T-035 | 5 | Profiling before/after and PERFORMANCE.md | done | `pending` | Steady state 16.7 ms at 60 Hz vsync, 0 B/frame. |
 | T-036 | 5 | .editorconfig, coverage of .gitignore and LFS | done | `pending` | .editorconfig and .gitignore updated. |
-| T-037 | 6 | Rewrite README with media and docs links | todo | — | — |
+| T-037 | 6 | Rewrite README with media and docs links | done | `pending` | Screenshots, controls, build/test commands, architecture. |
 | T-038 | 6 | Final QA, phase tags, merges and push | todo | — | — |

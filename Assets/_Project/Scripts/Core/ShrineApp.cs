@@ -54,6 +54,7 @@ namespace Shrine.Core
             _screensRoot = UiKit.Stretch(canvas.transform, "Screens");
             _fxRoot = UiKit.Stretch(canvas.transform, "Fx");
 
+            gameObject.AddComponent<Shrine.Utils.PerformanceProbe>();
             Audio = gameObject.AddComponent<AudioService>();
             Audio.Initialize(Settings);
             Vfx = _fxRoot.gameObject.AddComponent<ShrineVfx>();

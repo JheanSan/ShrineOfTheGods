@@ -1,21 +1,23 @@
 # Progress
 
 ## Active phase
-**Phase 5 — Code Quality and Performance** (Phases 1–4 implemented and visually verified).
+**Phase 6 — README and release** (all implementation phases complete).
 
 ## Last completed task
-T-034 — PlayMode smoke tests pass (2/2); EditMode rules tests pass (10/10).
+T-037 — README rewritten with screenshots, controls, build/test commands and
+architecture summary.
 
 ## Next three tasks
-1. T-032 — Pool card views and remove remaining card create/destroy churn.
-2. T-035 — Profile the title and battle, record frame time and GC in PERFORMANCE.md.
-3. T-037 — Rewrite README.md with final screenshots and honest status.
+1. T-038 — Final QA, tag all phases, merge to develop and push.
+2. Optional — native AudioMixer asset and sustained-battle profiling.
+3. Optional — physical gamepad verification.
 
 ## Open blockers
 - None. Unity 6000.3.22f1, licence and Windows build module work; Windows player builds.
-- Optional: `AudioMixer` is currently emulated by three AudioSources with gain
-  groups; a real mixer asset is still needed for T-023.
-- Gamepad navigation is not fully verified (T-019).
+- T-019 (gamepad parity) was dropped: EventSystem navigation is wired but no
+  physical controller was available for verification.
+- A native `AudioMixer` asset remains a roadmap item; routing uses three
+  gain-controlled AudioSources.
 
 ## Phase reports
 
@@ -42,6 +44,7 @@ DECISIONS.md and surfaced in the HUD and tooltips.
 
 ## Verification so far
 - Batchmode compile: **zero errors, zero warnings**.
-- EditMode: **10/10 passed**. PlayMode: **2/2 passed**.
-- Windows player: **build succeeds**; title, covenant, battle, tooltip and AI turn
-  observed visually in `docs/media/`.
+- EditMode: **11/11 passed**. PlayMode: **2/2 passed**.
+- Windows player: **build succeeds**; title, covenant, battle, card play, tooltip,
+  affordable opening hand and AI turn observed visually in `docs/media/`.
+- Performance: **16.66 ms/frame at 60 Hz vsync, 0 B/frame** steady state.
