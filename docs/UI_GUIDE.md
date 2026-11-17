@@ -88,3 +88,30 @@ States: normal, hover, pressed, focused, disabled, selected.
 - Second person, ceremonial but clear: "The shrine accepts your offering."
 - Never blame the player. Errors state the fix: "Your covenant needs 8 cards."
 - Numbers always show units/icons; no unexplained abbreviations.
+
+## Card face and board (Phase 7)
+
+Card: **172 x 230** canvas px, hand scale 0.92, field scale 0.98. Hand spacing
+186 px, so a five-card hand never overlaps; the hand root sits at y -390 so the
+lowest card clears the screen edge.
+
+Card anatomy, top to bottom:
+- cost gem (0.22 w) top-left, overhanging the frame; the number is 0.115 w.
+- name plate: 0.92 w band, name at 0.086 w with 3 pt tracking.
+- element line under the plate, 0.058 w, 55 % desaturated element colour.
+- art well: 0.88 w x 0.44 h, recessed, with a vignette and a per-card painted scene.
+- rule at -0.163 h, then `ATK` and `LIFE` labels at 10 px, then the two gems at
+  -0.33 h. Labels sit above the gems, never on them.
+- frames are 9-sliced; the outer 7 px is carved shadow, 22 px brackets are gilded.
+
+Board:
+- two 1020 x 240 field panels, five 172 x 230 slots each at 190 px pitch.
+- idle slots draw corner brackets at 55 % white; while dragging, the slot the card
+  would fill goes to 100 % candlelight and the rest dim to 28 %.
+- hero plates sit in the side margins: portrait, name, patron, `LIFE n/n` under
+  the bar, then the socketed life total (72 px) and a shield badge when shielded.
+- the mana bar shows all ten sockets from round one: bronze outline when locked,
+  cyan fill when available, dim when spent.
+- the turn plaque shows cards remaining above `CARDS REMAIN`; `VICTORY`/`DEFEAT`
+  replaces the count when the battle ends. The blessing button reads
+  `BLESSING n%` until it is charged, then `CLAIM BLESSING`.

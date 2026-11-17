@@ -43,3 +43,11 @@ Commits reference the short hash where the work landed.
 | T-036 | 5 | .editorconfig, coverage of .gitignore and LFS | done | `pending` | .editorconfig and .gitignore updated. |
 | T-037 | 6 | Rewrite README with media and docs links | done | `pending` | Screenshots, controls, build/test commands, architecture. |
 | T-038 | 6 | Final QA, phase tags, merges and push | done | `861e08b` | All phases tagged, merged to develop and pushed. |
+| T-039 | 7 | Painted per-card scenes and legible card faces | done | pending | Seeded shrine landscape per card, name plate, ATK/LIFE gems. |
+| T-040 | 7 | Magic/Hearthstone board: spread hand, two field rows | done | pending | 172x230 cards, hand 0.92, field 0.98, no overlap. |
+| T-041 | 7 | Recorded CC0 audio layered over synthesis | done | pending | 25 Kenney samples, 17 sample-backed cues, CREDITS updated. |
+| T-042 | 7 | Dedicated hero plates and mana sockets | done | pending | 30 HP socket, life bar, shield badge, 10 mana crystals. |
+| T-043 | 7 | Slot frames, target highlight and board panels | done | pending | Corner brackets, dim idle slots, bright drop target. |
+| T-044 | 7 | Turn plaque shows cards remaining | done | pending | Removes the duplicate "YOUR TURN" banner text. |
+| T-045 | 7 | Fix rival mana ramp, per-turn draws and AI budget | done | pending | Both sides ramp 2 to 10 and draw; AI spends a mana pool. |
+| T-046 | 7 | Autobattle recorder and full-battle verification | done | pending | Screenshot every action, both endings confirmed. |
