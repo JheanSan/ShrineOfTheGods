@@ -42,4 +42,4 @@ Commits reference the short hash where the work landed.
 | T-035 | 5 | Profiling before/after and PERFORMANCE.md | done | `pending` | Steady state 16.7 ms at 60 Hz vsync, 0 B/frame. |
 | T-036 | 5 | .editorconfig, coverage of .gitignore and LFS | done | `pending` | .editorconfig and .gitignore updated. |
 | T-037 | 6 | Rewrite README with media and docs links | done | `pending` | Screenshots, controls, build/test commands, architecture. |
-| T-038 | 6 | Final QA, phase tags, merges and push | todo | — | — |
+| T-038 | 6 | Final QA, phase tags, merges and push | done | `861e08b` | All phases tagged, merged to develop and pushed. |

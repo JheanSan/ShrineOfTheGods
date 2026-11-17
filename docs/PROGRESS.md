@@ -8,9 +8,9 @@ T-037 — README rewritten with screenshots, controls, build/test commands and
 architecture summary.
 
 ## Next three tasks
-1. T-038 — Final QA, tag all phases, merge to develop and push.
-2. Optional — native AudioMixer asset and sustained-battle profiling.
-3. Optional — physical gamepad verification.
+1. Optional — native AudioMixer asset and sustained-battle profiling.
+2. Optional — physical gamepad verification and controller prompts.
+3. Optional — localisation (English/Spanish).
 
 ## Open blockers
 - None. Unity 6000.3.22f1, licence and Windows build module work; Windows player builds.
