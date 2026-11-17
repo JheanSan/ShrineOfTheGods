@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using Shrine.Audio;
 using Shrine.Data;
 using Shrine.Gameplay;
@@ -35,6 +36,7 @@ namespace Shrine.Core
 
         private void Awake()
         {
+            DOTween.SetTweensCapacity(700, 60);
             Settings = new SettingsStore();
             Profile = ProfileStore.Load();
 
@@ -77,7 +79,13 @@ namespace Shrine.Core
             Router.Register(_confirm);
 
             Router.ShowImmediate("Title");
+
+            if (Shrine.Utils.BattleRecorder.Requested)
+                gameObject.AddComponent<Shrine.Utils.BattleRecorder>().Begin(this);
         }
+
+        /// <summary>The active battle screen, for diagnostics and automated recording.</summary>
+        public BattleScreen Battle => _battleScreen;
 
         private T CreateScreen<T>(string name) where T : ShrineScreen
         {

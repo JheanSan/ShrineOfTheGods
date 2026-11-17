@@ -33,8 +33,8 @@ namespace Shrine.UI
             _title.text = won ? "VICTORY" : "DEFEAT";
             _title.color = won ? ShrinePalette.Candlelight : ShrinePalette.BloodEmber;
             _details.text = won
-                ? $"The rival shrine falls silent.\n\n+{xp} pilgrimage XP\nRecord: {wins} victories in {games} battles"
-                : $"The shrine remembers your offering.\n\n+{xp} pilgrimage XP\nRecord: {wins} victories in {games} battles";
+                ? $"The rival shrine falls silent.\n\n+{xp} pilgrimage XP\nRecord: {wins} {(wins == 1 ? "victory" : "victories")} in {games} {(games == 1 ? "battle" : "battles")}"
+                : $"The shrine claims another pilgrim.\n\n+{xp} pilgrimage XP\nRecord: {wins} {(wins == 1 ? "victory" : "victories")} in {games} {(games == 1 ? "battle" : "battles")}";
             gameObject.SetActive(true);
             CanvasGroup group = GetComponent<CanvasGroup>();
             if (group != null) group.alpha = 1f;

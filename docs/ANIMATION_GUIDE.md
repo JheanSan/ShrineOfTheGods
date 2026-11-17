@@ -59,6 +59,17 @@ overshoot, then settle with 1–2 smaller oscillations. No single-frame teleport
 Damage SFX starts on the impact frame (after anticipation), not on click.
 UI hover sounds at −18 dB, click at −12 dB; never stack more than 2 at once.
 
+## Battle board card motion
+- Hand root y -390, scale 0.92; hover lifts 34 px and scales to 1.16 over
+  0.18 s OutCubic, returning over 0.24 s.
+- Field cards sit at scale 0.98. A card played from the hand is re-parented to the
+  field row and glides into place on the 0.32 s row tween; a rival card instead
+  flies out from the rival plate, 0.55 → 1.0 scale over 0.34 s OutBack, with an
+  ember burst of 8 particles and a 0.7 s ring.
+- Rows re-centre over 0.32 s OutCubic whenever the model changes, so a destroyed
+  card never leaves a hole. Hand cards also ride a 5 px-per-slot arc and tilt up
+  to 2 degrees outward.
+
 ## Reduced motion
 When `Settings.ReducedMotion` is on: no shake, no hit stop, durations ×0.6,
 fades only, no scale overshoot, particle count ×0.35.

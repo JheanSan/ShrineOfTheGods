@@ -33,10 +33,6 @@ namespace Shrine.UI
 
             RectTransform panel = UiKit.Centered(transform, "TitlePanel", new Vector2(760, 720), new Vector2(-300, 10));
             UiKit.Text(panel, "Title", "SHRINE\nOF THE GODS", 82, ShrinePalette.Candlelight, true);
-            UiKit.Text(panel, "Tagline", "Where every offering is remembered", 30,
-                ShrinePalette.BoneParchment, false, TMPro.TextAlignmentOptions.Center)
-                .rectTransform.anchoredPosition = new Vector2(0, -170);
-
             UiKit.Button(transform, "PlayButton", "ENTER THE SHRINE", new Vector2(430, 76),
                 new Vector2(390, 190), App.StartBattle);
             UiKit.Button(transform, "CovenantButton", "THE COVENANT", new Vector2(430, 70),

@@ -13,7 +13,14 @@ namespace Shrine.Audio
         Impact,
         Blessing,
         Victory,
-        Defeat
+        Defeat,
+        Attack,
+        Block,
+        Death,
+        Wound,
+        Mana,
+        Turn,
+        Offer
     }
 
     /// <summary>Decouples UI code from the audio service.</summary>
@@ -31,6 +38,13 @@ namespace Shrine.Audio
         public static void PlayBlessing() => SoundRequested?.Invoke(UiSound.Blessing);
         public static void PlayVictory() => SoundRequested?.Invoke(UiSound.Victory);
         public static void PlayDefeat() => SoundRequested?.Invoke(UiSound.Defeat);
+        public static void PlayAttack() => SoundRequested?.Invoke(UiSound.Attack);
+        public static void PlayBlock() => SoundRequested?.Invoke(UiSound.Block);
+        public static void PlayDeath() => SoundRequested?.Invoke(UiSound.Death);
+        public static void PlayWound() => SoundRequested?.Invoke(UiSound.Wound);
+        public static void PlayMana() => SoundRequested?.Invoke(UiSound.Mana);
+        public static void PlayTurn() => SoundRequested?.Invoke(UiSound.Turn);
+        public static void PlayOffer() => SoundRequested?.Invoke(UiSound.Offer);
         public static void PlaySound(UiSound sound) => SoundRequested?.Invoke(sound);
     }
 }

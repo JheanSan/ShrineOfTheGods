@@ -1,11 +1,11 @@
 # Progress
 
 ## Active phase
-**Phase 6 — README and release** (all implementation phases complete).
+**Phase 7 — Clarity, presence and verification** (implementation complete, awaiting tag).
 
 ## Last completed task
-T-037 — README rewritten with screenshots, controls, build/test commands and
-architecture summary.
+T-046 — autobattle recorder and full-battle verification: a 17-turn battle was
+played through the normal API and screenshotted end to end.
 
 ## Next three tasks
 1. Optional — native AudioMixer asset and sustained-battle profiling.
@@ -20,6 +20,38 @@ architecture summary.
   gain-controlled AudioSources.
 
 ## Phase reports
+
+### Phase 7
+Goal: make the battle read at a glance, move like a modern card battler and
+sound heavy, then prove it by playing whole matches.
+
+**Cards.** Every card now paints its own scene: a seeded shrine landscape with a
+moon, four ridgelines with lit edges, a ruin gate and a foreground colonnade,
+tinted by the card's element. Art sits in a recessed well under a vignette, with
+a name plate, an element line and labelled ATK/LIFE gems.
+
+**Board.** Cards are 172x230 with a 0.92 hand scale and a 0.98 field scale; the
+hand spreads without overlap, both fields sit in 240 px panels, idle slots are
+dim corner brackets and the next slot a dragged card would fill lights gold.
+
+**Readouts.** `HeroPlate` replaces floating text with a portrait slate holding a
+30 HP socket, life bar, shield badge, rival hand count and a low-life pulse.
+`ManaBar` shows ten sockets so the ramp to 10 is visible from turn one. The turn
+plaque shows cards remaining, so "YOUR TURN" is no longer printed twice.
+
+**Audio.** 25 curated CC0 samples from the Kenney packs are layered under the
+existing synthesis; 17 cues are sample-backed and the rest keep procedural
+weight. Every clip is logged in `CREDITS.md`.
+
+**Gameplay fixes found by verification.** The rival's mana cap never rose past
+2, so it could not play its own deck; neither side drew after the opening hand,
+leaving both decks at 20 all game; and the planner ignored mana entirely. Both
+sides now ramp 2 to 10, draw at the start of their turn, and the planner spends
+a simulated pool, filling its board by the late game.
+
+**Harness.** `BattleRecorder` (`-autobattle -shotdir <dir>`) plays a battle
+through the public API and screenshots the title, the open, every action, every
+turn boundary and the end screen, without touching the user's mouse or keyboard.
 
 ### Phase 0
 Confirmed the original: Unity 2022.3.44f1, built-in RP, six uGUI scenes, plaintext
@@ -44,7 +76,13 @@ DECISIONS.md and surfaced in the HUD and tooltips.
 
 ## Verification so far
 - Batchmode compile: **zero errors, zero warnings**.
-- EditMode: **11/11 passed**. PlayMode: **2/2 passed**.
-- Windows player: **build succeeds**; title, covenant, battle, card play, tooltip,
-  affordable opening hand and AI turn observed visually in `docs/media/`.
+- EditMode: **11/11 passed**. PlayMode: **2/2 passed**, re-run on the final code.
+- Windows player: **build succeeds** (`Build Finished, Result: Success.`).
+- Full battles played by `-autobattle` through the normal API, never by injecting
+  desktop input. Latest run: victory in round 5, 16 actions, 27 screenshots; the
+  longest run reached round 18 with 56 actions and 93 screenshots. A defeat path
+  was verified too (`playerHealth=0 rivalHealth=27 round=11`), so both endings render.
+- AI telemetry from those runs: both sides ramp 2 → 10 mana, the rival draws every
+  turn, and by round 9 it spends all ten mana and holds a full board.
+- Audio log: `25 recorded CC0 samples loaded, 17 cues backed by samples.`
 - Performance: **16.66 ms/frame at 60 Hz vsync, 0 B/frame** steady state.

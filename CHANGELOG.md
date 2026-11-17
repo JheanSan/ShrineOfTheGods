@@ -5,6 +5,34 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Phase 7 — Clarity, presence and full-battle verification
+#### Added
+- Painted card art: every card gets its own seeded shrine landscape (moon,
+  four ridgelines with rim light, ruin gate, foreground colonnade) tinted by
+  element, so the art well reads as an illustration instead of a rune.
+- Magic/Hearthstone-style board: 172x230 cards, a spread hand that never
+  overlaps, two 240 px field rows, and dim idle slots that brighten on drop.
+- `HeroPlate`: portrait slate with a 30 HP socket, life bar, shield badge,
+  low-life pulse and a rival hand count.
+- `ManaBar`: ten crystal sockets, unlocked ones bronze, spent ones dim.
+- Recorded CC0 audio from the Kenney packs (25 clips) layered under the
+  existing synthesis for weight: 17 cues are now sample-backed.
+- `BattleRecorder` `-autobattle` harness: plays a whole battle through the
+  normal API, screenshots every action and logs the result.
+
+#### Changed
+- Turn plaque now shows cards remaining instead of repeating "YOUR TURN";
+  blessing button shows its charge ("BLESSING 42%" / "CLAIM BLESSING").
+- Card faces: name plate, element line, ATK/LIFE labels and larger gems.
+
+#### Fixed
+- Rival mana never grew past 2: both sides now ramp to 10 and refill on their
+  own turn.
+- Neither side drew after the opening hand (deck stuck at 20): both draw at the
+  start of their turn, and the duplicate rival draw was removed.
+- The planner ignored mana and played at most one card: it now spends a
+  simulated pool and fills its board.
+
 ### Phase 5 — Code quality and tests (in progress)
 #### Added
 - EditMode rule tests (11) and PlayMode boot tests (2); all passing.
