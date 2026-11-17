@@ -48,4 +48,10 @@ A test run passes only when every test passes and the log contains no `error CS`
 ## Results
 | Phase | Date | EditMode | PlayMode | Manual | Notes |
 |---|---|---|---|---|---|
-| 0 | 2026-11-16 | n/a | n/a | original loads | Baseline; UI broken in places. |
+| 0 | 2026-11-16 | n/a | n/a | original loads | Baseline; battle crashed with empty deck. |
+| 1–2 | 2026-11-16 | n/a | n/a | title/covenant/battle | Fixed frames, raycasts, layout and overlays. |
+| 3–5 | 2026-11-17 | **11/11 passed** | **2/2 passed** | title → covenant → battle → play card → AI turn → tooltip | Zero compiler errors/warnings; player build succeeds. |
+
+Test result files: `TestResults/editmode.xml`, `TestResults/playmode.xml`.
+Coverage: turn flow, mana gating, elemental combat, least-damage rules, offerings,
+favour/blessing, seeded determinism, AI guards, scene boot and screen routing.

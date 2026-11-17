@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-11-17 00:31:20Z" end-time="2026-11-17 00:31:22Z" duration="1,8744507">
+  <test-suite type="TestSuite" id="1008" name="Shrine of the Gods" fullname="Shrine of the Gods" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-11-17 00:31:20Z" end-time="2026-11-17 00:31:22Z" duration="1.874451" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1004" name="Shrine.Tests.PlayMode.dll" fullname="C:/Users/Admin/Projects/ShrineOfTheGods/Library/ScriptAssemblies/Shrine.Tests.PlayMode.dll" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-11-17 00:31:20Z" end-time="2026-11-17 00:31:22Z" duration="1.856542" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="9724" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1005" name="Shrine" fullname="Shrine" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-11-17 00:31:20Z" end-time="2026-11-17 00:31:22Z" duration="1.855648" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1006" name="Tests" fullname="Shrine.Tests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-11-17 00:31:20Z" end-time="2026-11-17 00:31:22Z" duration="1.855088" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1001" name="BootSmokeTests" fullname="Shrine.Tests.BootSmokeTests" classname="Shrine.Tests.BootSmokeTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-11-17 00:31:20Z" end-time="2026-11-17 00:31:22Z" duration="1.851102" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1002" name="ShrineScene_BootsToTitleWithoutErrors" fullname="Shrine.Tests.BootSmokeTests.ShrineScene_BootsToTitleWithoutErrors" methodname="ShrineScene_BootsToTitleWithoutErrors" classname="Shrine.Tests.BootSmokeTests" runstate="Runnable" seed="1107709710" result="Passed" start-time="2026-11-17 00:31:20Z" end-time="2026-11-17 00:31:21Z" duration="1.280235" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[The referenced script on this Behaviour (Game Object '<null>') is missing!
+The referenced script on this Behaviour (Game Object '<null>') is missing!
+The referenced script on this Behaviour (Game Object '<null>') is missing!
+The referenced script on this Behaviour (Game Object '<null>') is missing!
+]]></output>
+            </test-case>
+            <test-case id="1003" name="ShrineScene_CanReachCovenant" fullname="Shrine.Tests.BootSmokeTests.ShrineScene_CanReachCovenant" methodname="ShrineScene_CanReachCovenant" classname="Shrine.Tests.BootSmokeTests" runstate="Runnable" seed="1890135228" result="Passed" start-time="2026-11-17 00:31:21Z" end-time="2026-11-17 00:31:22Z" duration="0.539335" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[<color=#0099bc><b>DOTWEEN ► </b></color>Target or field is missing/null (Void TryThrowEditorNullExceptionObject(UnityEngine.Object, System.String)) ► The object of type 'UnityEngine.RectTransform' has been destroyed but you are still trying to access it.
+Your script should either check if it is null or you should not destroy the object.
+
+  at UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) [0x0006a] in <2e73e675e85540d691359a460c857383>:0 
+  at UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) [0x00010] in <2e73e675e85540d691359a460c857383>:0 
+  at UnityEngine.Transform.set_localScale (UnityEngine.Vector3 value) [0x00006] in <2e73e675e85540d691359a460c857383>:0 
+  at DG.Tweening.ShortcutExtensions+<>c__DisplayClass45_0.<DOScale>b__1 (UnityEngine.Vector3 x) [0x00000] in D:\DG\_Develop\__UNITY_ASSETS\_Demigiant\__DOTween\_DOTween.Assembly\DOTween\ShortcutExtensions.cs:632 
+  at DG.Tweening.Plugins.Vector3Plugin.EvaluateAndApply (DG.Tweening.Plugins.Options.VectorOptions options, DG.Tweening.Tween t, System.Boolean isRelative, DG.Tweening.Core.DOGetter`1[T] getter, DG.Tweening.Core.DOSetter`1[T] setter, System.Single elapsed, UnityEngine.Vector3 startValue, UnityEngine.Vector3 changeValue, System.Single duration, System.Boolean usingInversePosition, System.Int32 newCompletedSteps, DG.Tweening.Core.Enums.UpdateNotice updateNotice) [0x0022b] in D:\DG\_Develop\__UNITY_ASSETS\_Demigiant\__DOTween\_DOTween.Assembly\DOTween\Plugins\Vector3Plugin.cs:159 
+  at DG.Tweening.Core.TweenerCore`3[T1,T2,TPlugOptions].ApplyTween (System.Single prevPosition, System.Int32 prevCompletedLoops, System.Int32 newCompletedSteps, System.Boolean useInversePosition, DG.Tweening.Core.Enums.UpdateMode updateMode, DG.Tweening.Core.Enums.UpdateNotice updateNotice) [0x00030] in D:\DG\_Develop\__UNITY_ASSETS\_Demigiant\__DOTween\_DOTween.Assembly\DOTween\Core\TweenerCore.cs:261 
+
+
+<color=#0099bc><b>DOTWEEN ► </b></color>Target or field is missing/null (Void TryThrowEditorNullExceptionObject(UnityEngine.Object, System.String)) ► The object of type 'UnityEngine.RectTransform' has been destroyed but you are still trying to access it.
+Your script should either check if it is null or you should not destroy the object.
+
+  at UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) [0x0006a] in <2e73e675e85540d691359a460c857383>:0 
+  at UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) [0x00010] in <2e73e675e85540d691359a460c857383>:0 
+  at UnityEngine.Transform.set_localScale (UnityEngine.Vector3 value) [0x00006] in <2e73e675e85540d691359a460c857383>:0 
+  at DG.Tweening.ShortcutExtensions+<>c__DisplayClass45_0.<DOScale>b__1 (UnityEngine.Vector3 x) [0x00000] in D:\DG\_Develop\__UNITY_ASSETS\_Demigiant\__DOTween\_DOTween.Assembly\DOTween\ShortcutExtensions.cs:632 
+  at DG.Tweening.Plugins.Vector3Plugin.EvaluateAndApply (DG.Tweening.Plugins.Options.VectorOptions options, DG.Tweening.Tween t, System.Boolean isRelative, DG.Tweening.Core.DOGetter`1[T] getter, DG.Tweening.Core.DOSetter`1[T] setter, System.Single elapsed, UnityEngine.Vector3 startValue, UnityEngine.Vector3 changeValue, System.Single duration, System.Boolean usingInversePosition, System.Int32 newCompletedSteps, DG.Tweening.Core.Enums.UpdateNotice updateNotice) [0x0022b] in D:\DG\_Develop\__UNITY_ASSETS\_Demigiant\__DOTween\_DOTween.Assembly\DOTween\Plugins\Vector3Plugin.cs:159 
+  at DG.Tweening.Core.TweenerCore`3[T1,T2,TPlugOptions].ApplyTween (System.Single prevPosition, System.Int32 prevCompletedLoops, System.Int32 newCompletedSteps, System.Boolean useInversePosition, DG.Tweening.Core.Enums.UpdateMode updateMode, DG.Tweening.Core.Enums.UpdateNotice updateNotice) [0x00030] in D:\DG\_Develop\__UNITY_ASSETS\_Demigiant\__DOTween\_DOTween.Assembly\DOTween\Core\TweenerCore.cs:261 
+
+
+<color=#0099bc><b>DOTWEEN ► </b></color>Target or field is missing/null (Void TryThrowEditorNullExceptionObject(UnityEngine.Object, System.String)) ► The object of type 'UnityEngine.UI.Image' has been destroyed but you are still trying to access it.
+Your script should either check if it is null or you should not destroy the object.
+
+  at UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) [0x0006a] in <2e73e675e85540d691359a460c857383>:0 
+  at UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) [0x00010] in <2e73e675e85540d691359a460c857383>:0 
+  at UnityEngine.Behaviour.get_isActiveAndEnabled () [0x00006] in <2e73e675e85540d691359a460c857383>:0 
+  at UnityEngine.EventSystems.UIBehaviour.IsActive () [0x00000] in .\Library\PackageCache\com.unity.ugui@20629863fcab\Runtime\UGUI\EventSystem\UIBehaviour.cs:28 
+  at UnityEngine.UI.Graphic.SetVerticesDirty () [0x00000] in .\Library\PackageCache\com.unity.ugui@20629863fcab\Runtime\UGUI\UI\Core\Graphic.cs:295 
+  at UnityEngine.UI.Graphic.set_color (UnityEngine.Color value) [0x0000e] in .\Library\PackageCache\com.unity.ugui@20629863fcab\Runtime\UGUI\UI\Core\Graphic.cs:156 
+  at DG.Tweening.DOTweenModuleUI+<>c__DisplayClass3_0.<DOColor>b__1 (UnityEngine.Color x) [0x00000] in C:\Users\Admin\Projects\ShrineOfTheGods\Assets\_Project\Scripts\ThirdParty\DOTween\DOTweenModuleUI.cs:69 
+  at DG.Tweening.Plugins.ColorPlugin.EvaluateAndApply (DG.Tweening.Plugins.Options.ColorOptions options, DG.Tweening.Tween t, System.Boolean isRelative, DG.Tweening.Core.DOGetter`1[T] getter, DG.Tweening.Core.DOSetter`1[T] setter, System.Single elapsed, UnityEngine.Color startValue, UnityEngine.Color changeValue, System.Single duration, System.Boolean usingInversePosition, System.Int32 newCompletedSteps, DG.Tweening.Core.Enums.UpdateNotice updateNotice) [0x00112] in D:\DG\_Develop\__UNITY_ASSETS\_Demigiant\__DOTween\_DOTween.Assembly\DOTween\Plugins\ColorPlugin.cs:87 
+  at DG.Tweening.Core.TweenerCore`3[T1,T2,TPlugOptions].ApplyTween (System.Single prevPosition, System.Int32 prevCompletedLoops, System.Int32 newCompletedSteps, System.Boolean useInversePosition, DG.Tweening.Core.Enums.UpdateMode updateMode, DG.Tweening.Core.Enums.UpdateNotice updateNotice) [0x00030] in D:\DG\_Develop\__UNITY_ASSETS\_Demigiant\__DOTween\_DOTween.Assembly\DOTween\Core\TweenerCore.cs:261 
+
+
+<color=#0099bc><b>DOTWEEN ► </b></color>Target or field is missing/null (Void TryThrowEditorNullExceptionObject(UnityEngine.Object, System.String)) ► The object of type 'UnityEngine.RectTransform' has been destroyed but you are still trying to access it.
+Your script should either check if it is null or you should not destroy the object.
+
+  at UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) [0x0006a] in <2e73e675e85540d691359a460c857383>:0 
+  at UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) [0x00010] in <2e73e675e85540d691359a460c857383>:0 
+  at UnityEngine.Transform.set_localScale (UnityEngine.Vector3 value) [0x00006] in <2e73e675e85540d691359a460c857383>:0 
+  at DG.Tweening.ShortcutExtensions+<>c__DisplayClass45_0.<DOScale>b__1 (UnityEngine.Vector3 x) [0x00000] in D:\DG\_Develop\__UNITY_ASSETS\_Demigiant\__DOTween\_DOTween.Assembly\DOTween\ShortcutExtensions.cs:632 
+  at DG.Tweening.Plugins.Vector3Plugin.EvaluateAndApply (DG.Tweening.Plugins.Options.VectorOptions options, DG.Tweening.Tween t, System.Boolean isRelative, DG.Tweening.Core.DOGetter`1[T] getter, DG.Tweening.Core.DOSetter`1[T] setter, System.Single elapsed, UnityEngine.Vector3 startValue, UnityEngine.Vector3 changeValue, System.Single duration, System.Boolean usingInversePosition, System.Int32 newCompletedSteps, DG.Tweening.Core.Enums.UpdateNotice updateNotice) [0x0022b] in D:\DG\_Develop\__UNITY_ASSETS\_Demigiant\__DOTween\_DOTween.Assembly\DOTween\Plugins\Vector3Plugin.cs:159 
+  at DG.Tweening.Core.TweenerCore`3[T1,T2,TPlugOptions].ApplyTween (System.Single prevPosition, System.Int32 prevCompletedLoops, System.Int32 newCompletedSteps, System.Boolean useInversePosition, DG.Tweening.Core.Enums.UpdateMode updateMode, DG.Tweening.Core.Enums.UpdateNotice updateNotice) [0x00030] in D:\DG\_Develop\__UNITY_ASSETS\_Demigiant\__DOTween\_DOTween.Assembly\DOTween\Core\TweenerCore.cs:261 
+
+
+<color=#0099bc><b>DOTWEEN ► </b></color>Target or field is missing/null (Void TryThrowEditorNullExceptionObject(UnityEngine.Object, System.String)) ► The object of type 'UnityEngine.RectTransform' has been destroyed but you are still trying to access it.
+Your script should either check if it is null or you should not destroy the object.
+
+  at UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) [0x0006a] in <2e73e675e85540d691359a460c857383>:0 
+  at UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) [0x00010] in <2e73e675e85540d691359a460c857383>:0 
+  at UnityEngine.RectTransform.set_anchoredPosition (UnityEngine.Vector2 value) [0x00006] in <2e73e675e85540d691359a460c857383>:0 
+  at DG.Tweening.DOTweenModuleUI+<>c__DisplayClass13_0.<DOAnchorPos>b__1 (UnityEngine.Vector2 x) [0x00000] in C:\Users\Admin\Projects\ShrineOfTheGods\Assets\_Project\Scripts\ThirdParty\DOTween\DOTweenModuleUI.cs:210 
+  at DG.Tweening.Plugins.Vector2Plugin.EvaluateAndApply (DG.Tweening.Plugins.Options.VectorOptions options, DG.Tweening.Tween t, System.Boolean isRelative, DG.Tweening.Core.DOGetter`1[T] getter, DG.Tweening.Core.DOSetter`1[T] setter, System.Single elapsed, UnityEngine.Vector2 startValue, UnityEngine.Vector2 changeValue, System.Single duration, System.Boolean usingInversePosition, System.Int32 newCompletedSteps, DG.Tweening.Core.Enums.UpdateNotice updateNotice) [0x001b2] in D:\DG\_Develop\__UNITY_ASSETS\_Demigiant\__DOTween\_DOTween.Assembly\DOTween\Plugins\Vector2Plugin.cs:139 
+  at DG.Tweening.Core.TweenerCore`3[T1,T2,TPlugOptions].ApplyTween (System.Single prevPosition, System.Int32 prevCompletedLoops, System.Int32 newCompletedSteps, System.Boolean useInversePosition, DG.Tweening.Core.Enums.UpdateMode updateMode, DG.Tweening.Core.Enums.UpdateNotice updateNotice) [0x00030] in D:\DG\_Develop\__UNITY_ASSETS\_Demigiant\__DOTween\_DOTween.Assembly\DOTween\Core\TweenerCore.cs:261 
+
+
+Saving results to: C:\Users\Admin\Projects\ShrineOfTheGods\TestResults\playmode.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

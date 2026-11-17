@@ -11,7 +11,7 @@ public class PlayerDeck : MonoBehaviour
         {
             if (_instance == null)
             {
-                _instance = FindObjectOfType<PlayerDeck>();
+                _instance = FindFirstObjectByType<PlayerDeck>();
                 if (_instance == null)
                 {
                     GameObject go = new GameObject("PlayerDeck");

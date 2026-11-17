@@ -27,7 +27,7 @@ public class CardDisplay : MonoBehaviour
         }
         button.onClick.AddListener(OnCardClicked);
 
-        infoPanelManager = FindObjectOfType<InfoPanelManager>();
+        infoPanelManager = FindFirstObjectByType<InfoPanelManager>();
 
         startPosition = transform.position;
     }

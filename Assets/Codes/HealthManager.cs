@@ -103,7 +103,7 @@ public class HealthManager : MonoBehaviour
         }
 
         // Disable card dragging
-        Draggable[] draggables = FindObjectsOfType<Draggable>();
+        Draggable[] draggables = FindObjectsByType<Draggable>(FindObjectsSortMode.None);
         foreach (Draggable drag in draggables)
         {
             drag.enabled = false;

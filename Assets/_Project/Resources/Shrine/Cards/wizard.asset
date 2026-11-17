@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bf5f65bec8bdab4788e2e0efc13abda, type: 3}
+  m_Name: wizard
+  m_EditorClassIdentifier: Shrine::Shrine.Data.CardDefinition
+  _data:
+    Id: wizard
+    DisplayName: Wizard
+    Element: 1
+    Attack: 2
+    Defense: 4
+    ManaCost: 6
+    Lore: A wizard whose beard holds the names of seven forgotten seas.
+    ArtResourcePath: 

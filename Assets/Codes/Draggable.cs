@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
@@ -13,8 +13,8 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     private void Awake()
     {
         cardDisplay = GetComponent<CardDisplay>();
-        cardInteraction = FindObjectOfType<CardInteraction>();
-        canvas = FindObjectOfType<Canvas>();
+        cardInteraction = FindFirstObjectByType<CardInteraction>();
+        canvas = FindFirstObjectByType<Canvas>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)

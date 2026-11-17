@@ -26,6 +26,12 @@
 
 License texts are stored next to the fonts in `Assets/_Project/Art/Fonts/Licenses/`.
 
+## Procedural art
+`ProceduralArt` generates the button frames, card frames, element sigils, altar,
+favour motes and vignette at runtime from the Style Bible palette (original code,
+no outside images). The original painted backgrounds, card paintings, card back
+and god portraits from the project author are reused unchanged.
+
 ## Audio
 All music and SFX in the overhaul are **procedurally synthesised at runtime** by
 `ProceduralAudio` (original code, no outside samples), unless a future entry below
