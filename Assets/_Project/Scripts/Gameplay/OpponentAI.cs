@@ -49,11 +49,14 @@ namespace Shrine.Gameplay
 
             var playable = new List<CardInstance>(opponent.Hand);
             playable.Sort((a, b) => b.Data.ManaCost.CompareTo(a.Data.ManaCost));
+            int mana = opponent.Mana;
             foreach (CardInstance card in playable)
             {
-                if (opponent.Field.Count >= 5) break;
-                if (_model.CanPlay(Side.Opponent, card.Uid))
-                    actions.Add(new BattleAction(BattleActionKind.Play, card.Uid));
+                if (opponent.Field.Count + actions.Count >= 5) break;
+                int cost = _model.EffectiveCost(card, Side.Opponent);
+                if (cost > mana) continue;
+                actions.Add(new BattleAction(BattleActionKind.Play, card.Uid));
+                mana -= cost;
             }
 
             foreach (CardInstance attacker in new List<CardInstance>(opponent.Field))

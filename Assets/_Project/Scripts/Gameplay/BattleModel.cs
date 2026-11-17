@@ -17,6 +17,7 @@ namespace Shrine.Gameplay
         public int Shield { get; internal set; }
         public int Favour { get; internal set; }
         public PatronData Patron { get; }
+        public int DeckCount => DrawPile.Count;
         public readonly List<CardInstance> Hand = new List<CardInstance>();
         public readonly List<CardInstance> Field = new List<CardInstance>();
         internal readonly List<CardData> DrawPile = new List<CardData>();
@@ -316,16 +317,21 @@ namespace Shrine.Gameplay
             {
                 _round++;
                 if (_player.MaxMana < _balance.MaxMana) _player.MaxMana++;
+                if (_opponent.MaxMana < _balance.MaxMana) _opponent.MaxMana++;
                 _player.Mana = _player.MaxMana;
                 _opponent.Mana = _opponent.MaxMana;
                 ManaChanged?.Invoke(Side.Player, _player.Mana, _player.MaxMana);
                 ManaChanged?.Invoke(Side.Opponent, _opponent.Mana, _opponent.MaxMana);
                 foreach (CardInstance card in _player.Field) card.ResetAttack();
+                Draw(Side.Player);
+                if (_over) return;
                 RollOmen();
             }
             else
             {
                 foreach (CardInstance card in _opponent.Field) card.ResetAttack();
+                Draw(Side.Opponent);
+                if (_over) return;
             }
             TurnChanged?.Invoke(CurrentSide);
         }
@@ -351,7 +357,7 @@ namespace Shrine.Gameplay
             CardDrawn?.Invoke(card, side);
         }
 
-        private int EffectiveCost(CardInstance card, Side side)
+        public int EffectiveCost(CardInstance card, Side side)
         {
             int cost = card.Data.ManaCost;
             if (_currentOmen.Id == "gale_whisper" && card.Data.Element == ElementKind.Air && !card.HasUsedPower)
